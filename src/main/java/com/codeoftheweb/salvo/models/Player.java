@@ -1,10 +1,12 @@
 package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.persistence.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 @Entity
 public class Player {
@@ -14,6 +16,20 @@ public class Player {
     @GenericGenerator(name = "native", strategy = "native")
     private long id; // va a ser la primary key.
     private String userName;
+
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
+    }
+
+    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
+        this.gamePlayers = gamePlayers;
+    }
+
+    //con esto hago la relacion bidireccional.
+    // desde el jugador puedo ver en que juegos esta
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+    private Set<GamePlayer> gamePlayers;
+
 
     public Player(){} // constructor vacio necesario
 
@@ -31,5 +47,19 @@ public class Player {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @RequestMapping
+    public Map<String, Object> makePlayerDTO() {
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", this.getId());
+        dto.put("email", this.getUserName()); //ACA ESTABA EL ERROR
+
+        return dto;
+
     }
 }
