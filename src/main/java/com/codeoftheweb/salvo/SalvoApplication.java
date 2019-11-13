@@ -3,6 +3,7 @@ package com.codeoftheweb.salvo;
 import com.codeoftheweb.salvo.models.Game;
 import com.codeoftheweb.salvo.models.GamePlayer;
 import com.codeoftheweb.salvo.models.Player;
+import com.codeoftheweb.salvo.models.Ship;
 import com.codeoftheweb.salvo.repositories.GamePlayerRepository;
 import com.codeoftheweb.salvo.repositories.GameRepository;
 import com.codeoftheweb.salvo.repositories.PlayerRepository;
@@ -65,6 +66,7 @@ public class SalvoApplication {
 			gamePlayerRepository.save(gamePlayer3);
 			gamePlayerRepository.save(gamePlayer4);
 
+			Ship ship1 = new Ship();
 		};
 	}
 

@@ -2,10 +2,12 @@ package com.codeoftheweb.salvo.controllers;
 
 import com.codeoftheweb.salvo.repositories.GameRepository;
 import com.codeoftheweb.salvo.repositories.PlayerRepository;
+import com.codeoftheweb.salvo.repositories.ShipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,18 @@ public class AppController {
     @Autowired
     PlayerRepository playerRepository;
 
+    @Autowired
+    ShipRepository shipRepository;
+
+    @RequestMapping("/ships")
+    public List<Object> getShipsAll(){
+
+        return shipRepository.findAll()
+                .stream()
+                .map(ship -> ship.makeShipDTO())
+                .collect(Collectors.toList());
+    }
+
     @RequestMapping("/games") //nombre publico
     public List<Object> getGamesAll() {//getGamesAll es el nombre privado
 
@@ -31,6 +45,19 @@ public class AppController {
     }
     //genero una lista, los hizo stream, los modifico (los hizo un mapa) para poder pasar la informacion de una forma particular, y luego los vuelve a hacer una lista.
 
+
+    //esto fue para explicar algo, no es parte de la consigna
+    @RequestMapping("/miUrl")
+    public List<String>example(){
+
+        List<String> lista = new ArrayList<>();
+
+        lista.add("David");
+        lista.add("ASDasdasd");
+        lista.add("Erci");
+
+        return lista;
+    }
 
 
 
@@ -52,9 +79,6 @@ public class AppController {
         public void setPlayerRepository(PlayerRepository playerRepository) {
             this.playerRepository = playerRepository;
         }
-
-
-
 
 
 }

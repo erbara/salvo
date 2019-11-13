@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.DoubleStream;
 
 @Entity
@@ -27,6 +28,10 @@ public class GamePlayer {
     private Game game;
 
     private Date joinDate;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name="ship_id")
+    private Set<Ship> ships;
 
     //CONSTRUCTORES
     public GamePlayer(){
