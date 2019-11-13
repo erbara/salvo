@@ -2,7 +2,6 @@ package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -19,12 +18,11 @@ public class Game {
     private long id; // va a ser la primary key.
     private Date creationDate;
 
-
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<GamePlayer> gamePlayers;
 
 
-
+    //CONSTRUCTORES
     public Game(){
         this.creationDate = new Date();
     } // constructor vacio necesario
@@ -33,12 +31,26 @@ public class Game {
         this.creationDate = new Date();
     }
 
-    public Set<GamePlayer> getGamePlayers() {
-        return gamePlayers;
+
+    @RequestMapping
+    public Map<String, Object> makeGameDTO() {
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", this.getId()); //ESTOS NOMBRES id, create, gamePlayer son lo que hay que respetar porque asi se setearon en el jason
+        dto.put("created" , this.getCreationDate());
+
+        dto.put("gamePlayers" , this.getGamePlayers()
+                                     .stream()
+                                     .map(gamePlayer -> gamePlayer.makeGamePlayerDTO())
+                                     .collect(Collectors.toList()));
+
+        return dto;
     }
 
-    public void setId(long id) {
-        this.id = id;
+
+    //SETTERS y GETTERS
+
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
     }
 
     public void setGamePlayers(Set<GamePlayer> gamePlayers) {
@@ -57,16 +69,4 @@ public class Game {
         this.creationDate = creationDate;
     }
 
-    @RequestMapping
-    public Map<String, Object> makeGameDTO() {
-        Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("id", this.getId()); //ESTOS NOMBRES id, create, gamePlayer son lo que hay que respetar porque asi se setearon en el jason
-        dto.put("created" , this.getCreationDate());
-        dto.put("gamePlayers" , this.getGamePlayers()
-                                     .stream()
-                                     .map(gamePlayer -> gamePlayer.makeGamePlayerDOT())
-                                     .collect(Collectors.toList()));
-
-        return dto;
-    }
 }

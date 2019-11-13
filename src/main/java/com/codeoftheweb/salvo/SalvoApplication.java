@@ -27,19 +27,15 @@ public class SalvoApplication {
 			// save a couple of customers
 
 
-			Player player1 = new Player ("erbara@gmail.com");
-			Player player2 = new Player ("likset@gmail.com");
-			Player player3 = new Player ("jose@gmail.com");
-			Player player4 = new Player ("yellow@gmail.com");
-			Player player5 = new Player ("julio@gmail.com");
-			Player player6 = new Player ("dani@gmail.com");
+			Player player1 = new Player ("j.bauer@ctu.gov");
+			Player player2 = new Player ("c.obrian@ctu.gov");
+			Player player3 = new Player ("kim_bauer@gmail.com");
+			Player player4 = new Player ("t.almeida@ctu.gov");
 
 			playerRepository.save( player1);
 			playerRepository.save( player2);
 			playerRepository.save( player3 );
 			playerRepository.save( player4 );
-			playerRepository.save( player5 );
-			playerRepository.save( player6 );
 
 			//creacion de juegos
 			Game game1 = new Game();
@@ -69,10 +65,6 @@ public class SalvoApplication {
 			gamePlayerRepository.save(gamePlayer3);
 			gamePlayerRepository.save(gamePlayer4);
 
-			GamePlayer gamePlayer5 = new GamePlayer(player5, game3);
-			GamePlayer gamePlayer6 = new GamePlayer(player6, game3);
-			gamePlayerRepository.save(gamePlayer5);
-			gamePlayerRepository.save(gamePlayer6);
 		};
 	}
 

@@ -15,22 +15,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class AppController {
 
-    public GameRepository getGameRepository() {
-        return gameRepository;
-    }
-
-    public void setGameRepository(GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
-    }
-
-    public PlayerRepository getPlayerRepository() {
-        return playerRepository;
-    }
-
-    public void setPlayerRepository(PlayerRepository playerRepository) {
-        this.playerRepository = playerRepository;
-    }
-
     @Autowired
     GameRepository gameRepository;
 
@@ -48,12 +32,29 @@ public class AppController {
     //genero una lista, los hizo stream, los modifico (los hizo un mapa) para poder pasar la informacion de una forma particular, y luego los vuelve a hacer una lista.
 
 
-    @RequestMapping("/players")
-    public List<Object> getPlayers() {
 
-        return playerRepository.findAll()
-                .stream()
-                .map(player -> player.makePlayerDTO())
-                .collect(Collectors.toList());
-    }
+
+
+    //SETTERS y GETTERS
+
+        public GameRepository getGameRepository() {
+            return gameRepository;
+        }
+
+        public void setGameRepository(GameRepository gameRepository) {
+            this.gameRepository = gameRepository;
+        }
+
+        public PlayerRepository getPlayerRepository() {
+            return playerRepository;
+        }
+
+        public void setPlayerRepository(PlayerRepository playerRepository) {
+            this.playerRepository = playerRepository;
+        }
+
+
+
+
+
 }

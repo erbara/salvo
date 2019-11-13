@@ -28,6 +28,7 @@ public class GamePlayer {
 
     private Date joinDate;
 
+    //CONSTRUCTORES
     public GamePlayer(){
         this.joinDate = new Date();
     }
@@ -38,10 +39,19 @@ public class GamePlayer {
         this.player = player;
     }
 
-    public void setId(long id) {
-        this.id = id;
+
+    @RequestMapping
+    public Map<String, Object> makeGamePlayerDTO() {
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", this.getId());
+        dto.put("player", this.getPlayer().makePlayerDTO());
+
+        return dto;
     }
 
+
+
+    //SETTERS y GETTERS
     public Player getPlayer() {
         return player;
     }
@@ -62,7 +72,6 @@ public class GamePlayer {
         return id;
     }
 
-
     public Date getJoinDate() {
         return joinDate;
     }
@@ -71,12 +80,4 @@ public class GamePlayer {
         this.joinDate = joinDate;
     }
 
-    @RequestMapping
-    public Map<String, Object> makeGamePlayerDOT() {
-        Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("id", this.getId());
-        dto.put("player", this.getPlayer().makePlayerDTO());
-
-        return dto;
-    }
 }

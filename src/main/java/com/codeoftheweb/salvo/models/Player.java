@@ -15,15 +15,8 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id; // va a ser la primary key.
+
     private String userName;
-
-    public Set<GamePlayer> getGamePlayers() {
-        return gamePlayers;
-    }
-
-    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
-        this.gamePlayers = gamePlayers;
-    }
 
     //con esto hago la relacion bidireccional.
     // desde el jugador puedo ver en que juegos esta
@@ -31,10 +24,32 @@ public class Player {
     private Set<GamePlayer> gamePlayers;
 
 
-    public Player(){} // constructor vacio necesario
+    //CONSTRUCTORES
+    public Player(){} // constructor vacio necesario para la DB
 
     public Player(String userName) {
         this.userName = userName;
+    }
+
+
+    @RequestMapping
+    public Map<String, Object> makePlayerDTO() {
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", this.getId());
+        dto.put("email", this.getUserName()); //ACA ESTABA EL ERROR
+
+        return dto;
+    }
+
+
+    //SETTERS y GETTERS
+
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
+    }
+
+    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
+        this.gamePlayers = gamePlayers;
     }
 
     public long getId() {
@@ -49,17 +64,5 @@ public class Player {
         this.userName = userName;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
-    @RequestMapping
-    public Map<String, Object> makePlayerDTO() {
-        Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("id", this.getId());
-        dto.put("email", this.getUserName()); //ACA ESTABA EL ERROR
-
-        return dto;
-
-    }
 }
