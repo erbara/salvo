@@ -38,6 +38,7 @@ public class Ship {
     public Map<String, Object> makeShipDTO() {
         Map<String, Object>dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
+        dto.put("type", this.typeShip);
         dto.put("location", this.getLocations());
         //todo fijarse que mas agregar
         return dto;
@@ -73,8 +74,6 @@ public class Ship {
     public void setLocations(List<String> locations) {
         this.locations = locations;
     }
-
-
 
 
 }

@@ -2,6 +2,7 @@ package com.codeoftheweb.salvo.controllers;
 
 import com.codeoftheweb.salvo.models.Game;
 import com.codeoftheweb.salvo.models.GamePlayer;
+import com.codeoftheweb.salvo.models.Player;
 import com.codeoftheweb.salvo.repositories.GamePlayerRepository;
 import com.codeoftheweb.salvo.repositories.GameRepository;
 import com.codeoftheweb.salvo.repositories.PlayerRepository;
@@ -72,7 +73,35 @@ public class AppController {
 
 
     @RequestMapping("/game_view/{nn}")
-    public Map<String, Object> getGamePlayerInformation(@PathVariable("nn") Long gameID) {
+    public Map<String, Object> getGamePlayerInformation(@PathVariable("nn") Long gamePlayerID) {
+
+        Map<String, Object> gamePlayerDto = new LinkedHashMap<>();
+
+        //busco la coincidencia
+        GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerID).get();
+        Game game = gamePlayer.getGame();
+
+        gamePlayerDto.put("id", gamePlayer.getId());
+        gamePlayerDto.put("created", game.getCreationDate());
+
+        List<GamePlayer> gamePlayerList = gamePlayerRepository.findAll()
+                .stream()
+                .filter(gamePlayer1 -> gamePlayer1.getGame().getId() == game.getId())
+                .collect(Collectors.toList());
+
+        //List<GamePlayer> gamePlayersList = gamePlayerRepository.findAll()
+//                .stream()
+//                .filter(gamePlayer1 -> gamePlayer1.getGame().getId() == playerID )
+        //              .collect(Collectors.toList());
+
+        //gamePlayerDto.put("gamePlayers", gamePlayersList.stream().map(gamePlayer2 -> gamePlayer2.makeGamePlayerDTO()).collect(Collectors.toList()));
+
+        gamePlayerDto.put("gamePlayers", gamePlayerList.stream().map(gamePlayer1 -> gamePlayer1.makeGamePlayerDTO()).collect(Collectors.toList()));
+
+        return gamePlayerDto;
+
+  /*  public Map<String, Object> getGameInformation(@PathVariable("nn") Long gameID) {
+
 
         Map<String, Object> dto = new LinkedHashMap<>();
 
@@ -90,8 +119,8 @@ public class AppController {
 
         return dto;
     }
-
-
+*/
+    }
 
     //esto fue para explicar algo, no es parte de la consigna
     @RequestMapping("/miUrl")
