@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo.controllers;
 
+import com.codeoftheweb.salvo.models.Game;
 import com.codeoftheweb.salvo.models.GamePlayer;
 import com.codeoftheweb.salvo.repositories.GamePlayerRepository;
 import com.codeoftheweb.salvo.repositories.GameRepository;
@@ -71,19 +72,21 @@ public class AppController {
 
 
     @RequestMapping("/game_view/{nn}")
-    public Map<String, Object> getGamePlayerInformation(@PathVariable("nn") Long gamePlayerID) {
+    public Map<String, Object> getGamePlayerInformation(@PathVariable("nn") Long gameID) {
 
         Map<String, Object> dto = new LinkedHashMap<>();
 
         //busco la coincidencia
-        GamePlayer gamePlayer = gamePlayerRepository.getOne(gamePlayerID);
-        dto.put("id", gamePlayer.getId());
-        dto.put("created", gamePlayer.getJoinDate());
+        Game game = gameRepository.getOne(gameID);
+        dto.put("id", game.getId());
+        dto.put("created", game.getCreationDate());
 
-        //List<GamePlayer> gamePlayersList = gamePlayerRepository.findAll()
-//                .stream()
-//                .allMatch(gamePlayer1 -> gamePlayer1.)
-//        dto.put("gamePlayers", gamePlayer.makeGamePlayerDTO());
+        List<GamePlayer> gamePlayersList = gamePlayerRepository.findAll()
+                .stream()
+                .filter(gamePlayer1 -> gamePlayer1.getGame().getId() == gameID )
+                .collect(Collectors.toList());
+
+        dto.put("gamePlayers", gamePlayersList.stream().map(gamePlayer -> gamePlayer.makeGamePlayerDTO()).collect(Collectors.toList()));
 
         return dto;
     }

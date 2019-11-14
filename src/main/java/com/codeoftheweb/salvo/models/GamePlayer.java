@@ -54,6 +54,9 @@ public class GamePlayer {
         this.getShips().add(ship);
     }
 
+    //todo borrar que creo que esta al pedo
+    //public long
+
     //SETTERS y GETTERS
     public Player getPlayer() {
         return player;
