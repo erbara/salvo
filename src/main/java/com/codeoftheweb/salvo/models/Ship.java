@@ -3,7 +3,10 @@ package com.codeoftheweb.salvo.models;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -14,18 +17,31 @@ public class Ship {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
+    //todo queda asi?
     private String typeShip;
 
-    private Set<> locations;
+    @ElementCollection
+    @Column(name="location")
+    private List<String> locations = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name="gamePlayer_ID")
-    private GamePlayer gamePlayer; //todo anadir anotaciones JPA con la base de datos
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="gamePlayer_id")
+    private GamePlayer gamePlayer;
+
 
     //CONSTRUCTORES
-    public Ship(){}
+    public Ship(){
+
+    }
 
 
+    public Map<String, Object> makeShipDTO() {
+        Map<String, Object>dto = new LinkedHashMap<>();
+        dto.put("id", this.getId());
+        dto.put("location", this.getLocations());
+        //todo fijarse que mas agregar
+        return dto;
+    }
 
 
     //SETTERS y GETTERS
@@ -42,12 +58,8 @@ public class Ship {
         this.typeShip = typeShip;
     }
 
-    public Map<String, Integer> getLocations() {
+    public List getLocations() {
         return locations;
-    }
-
-    public void setLocations(Map<String, Integer> locations) {
-        this.locations = locations;
     }
 
     public GamePlayer getGamePlayer() {
@@ -58,10 +70,11 @@ public class Ship {
         this.gamePlayer = gamePlayer;
     }
 
-    public Map<String, Object> makeShipDTO() {
-        Map<String, Object>dto = new LinkedHashMap<>();
-        dto.put("id", this.getId());
-        //todo fijarse que mas agrgar
-        return dto;
+    public void setLocations(List<String> locations) {
+        this.locations = locations;
     }
+
+
+
+
 }

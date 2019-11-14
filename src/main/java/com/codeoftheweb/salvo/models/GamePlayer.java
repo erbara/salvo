@@ -4,10 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.DoubleStream;
 
 @Entity
@@ -29,9 +26,8 @@ public class GamePlayer {
 
     private Date joinDate;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name="ship_id")
-    private Set<Ship> ships;
+    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    private Set<Ship> ships = new HashSet<Ship>();
 
     //CONSTRUCTORES
     public GamePlayer(){
@@ -54,7 +50,9 @@ public class GamePlayer {
         return dto;
     }
 
-
+    public void addShip(Ship ship){
+        this.getShips().add(ship);
+    }
 
     //SETTERS y GETTERS
     public Player getPlayer() {
@@ -85,4 +83,11 @@ public class GamePlayer {
         this.joinDate = joinDate;
     }
 
+    public Set<Ship> getShips() {
+        return ships;
+    }
+
+    public void setShips(Set<Ship> ships) {
+        this.ships = ships;
+    }
 }
