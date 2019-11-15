@@ -22,11 +22,13 @@ public class Game {
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<GamePlayer> gamePlayers;
 
-    //CONSTRUCTORES
-    public Game() {
-        this.creationDate = new Date();
 
-    } // constructor vacio necesario
+    //CONSTRUCTORES
+
+    public Game() {  //constructor vacio necesario para la DB
+        this.creationDate = new Date();
+    }
+
 
     public Game(Date creationDate) {
         this.creationDate = creationDate;
@@ -36,6 +38,7 @@ public class Game {
                  this.creationDate = new Date();
                }
            */
+
 
     @RequestMapping
     public Map<String, Object> makeGameDTO() {

@@ -2,10 +2,8 @@ package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 public class GamePlayer {
@@ -29,6 +27,7 @@ public class GamePlayer {
     private Set<Ship> ships;
 
     //CONSTRUCTORES
+
     public GamePlayer() {
         this.joinDate = new Date();
     }
@@ -44,28 +43,18 @@ public class GamePlayer {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("player", this.getPlayer().makePlayerDTO());
-//        dto.put("playerShips", ships.stream()
-//                .map(ship -> ship.makeShipDTO())
-//                .collect(Collectors.toList()));
+
         return dto;
     }
 
-    //todo - lo hice para la tarea 3, no se si es necesario o un error
-//    @RequestMapping
-//    public Map<String, Object> showOnlyPlayerDTO(){
-//        Map<String, Object> dto = new LinkedHashMap<>();
-//        dto.put();
-//    }
-
-//NO ESTOS MOSTRANDO LOS BARCOS DEL GAMEPLAYER
 
     public void addShip(Ship ship) {
         ship.setGamePlayer(this);
-        //this.getShips().add(ship);
     }
 
 
     //SETTERS y GETTERS
+
     public Player getPlayer() {
         return player;
     }

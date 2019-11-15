@@ -18,13 +18,12 @@ public class Player {
 
     private String userName;
 
-    //con esto hago la relacion bidireccional.
-    // desde el jugador puedo ver en que juegos esta
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private Set<GamePlayer> gamePlayers;
 
 
     //CONSTRUCTORES
+
     public Player() {
     } // constructor vacio necesario para la DB
 

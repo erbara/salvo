@@ -1,6 +1,5 @@
 package com.codeoftheweb.salvo.controllers;
 
-import com.codeoftheweb.salvo.models.Game;
 import com.codeoftheweb.salvo.models.GamePlayer;
 import com.codeoftheweb.salvo.repositories.GamePlayerRepository;
 import com.codeoftheweb.salvo.repositories.GameRepository;
@@ -41,14 +40,13 @@ public class AppController {
     }
 
     @RequestMapping("/games") //nombre publico
-    public List<Object> getGamesAll() {//getGamesAll es el nombre privado
+    public List<Object> getGamesAll() {
 
-        return gameRepository.findAll() //accedo a todos los juegos, los hace una coleccion
-                .stream() //obtiene todos los datos de la coleccion y me permite usar una gran cantidad de metodos
+        return gameRepository.findAll()
+                .stream()
                 .map(game -> game.makeGameDTO()) //
                 .collect(Collectors.toList());
     }
-    //genero una lista, los hizo stream, los modifico (los hizo un mapa) para poder pasar la informacion de una forma particular, y luego los vuelve a hacer una lista.
 
     @RequestMapping("/players")
     public List<Object> getPlayersAll() {
@@ -58,64 +56,29 @@ public class AppController {
                 .collect(Collectors.toList());
     }
 
-
-    /*
-    * La mejor forma de hacer esto (escalable por si se leyeran mas parametros
-    * por la URL mas adelante
-    *
-    * @RequestMapping("/api/game_view/{nn}")
-    public Map<String, Object> getPlayerInformation(@PathVariable("nn") Long nn) {
-    *
-    *  */
-
-
     @RequestMapping("/game_view/{nn}")
     public Map<String, Object> getGamePlayerInformation(@PathVariable("nn") Long gamePlayerID) {
 
-        Optional<GamePlayer> gamePlayerOptional = gamePlayerRepository.findById(gamePlayerID);
-        //el valor puede existir o no. voy a usar esto de paso intermedio para que me permita crear el objeto
+        GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerID).get();
 
-        GamePlayer gamePlayer = gamePlayerOptional.get();
-        //aca obtengo el objeto. si fuera nulo, saldria un error de Java de pointer Null Exception.
+        Map<String, Object> dto = new LinkedHashMap<>();
 
-
-        Map<String, Object> gamePlayerDTO = new LinkedHashMap<>();
-
-        gamePlayerDTO.put("id", gamePlayerID);
-
-        Game game = gamePlayer.getGame();
-        gamePlayerDTO.put("created", game.getCreationDate());
-
-        //obtengo, del Game, la info de ambos GamePlayers
-        List<GamePlayer> gamePlayersList = new ArrayList<>();
-        gamePlayersList.addAll(game.getGamePlayers());
-
-        gamePlayerDTO.put("gamePlayers", gamePlayersList.stream()
-                .map(_gamePlayerList -> _gamePlayerList.makeGamePlayerDTO())
+        dto.put("id", gamePlayer.getId());
+        dto.put("created", gamePlayer.getGame().getCreationDate());
+        dto.put("gamePlayers", gamePlayer.getGame().getGamePlayers()
+                .stream()
+                .map(_gamePlayer -> _gamePlayer.makeGamePlayerDTO())
+                .collect(Collectors.toList())
         );
 
-        gamePlayerDTO.put("ships", gamePlayer.getShips()
+        dto.put("ships", gamePlayer.getShips()
                 .stream()
                 .map(ship -> ship.makeShipDTO())
+                .collect(Collectors.toList())
         );
 
-        return gamePlayerDTO;
+        return dto;
     }
-
-
-//    //esto fue para explicar algo, no es parte de la consigna
-//    @RequestMapping("/miUrl")
-//    public List<String> example() {
-//
-//        List<String> lista = new ArrayList<>();
-//
-//        lista.add("David");
-//        lista.add("ASDasdasd");
-//        lista.add("Erci");
-//
-//        return lista;
-//    }
-
 
 
     //SETTERS y GETTERS

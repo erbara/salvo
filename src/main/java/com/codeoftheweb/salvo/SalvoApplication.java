@@ -13,10 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @SpringBootApplication
@@ -47,16 +44,6 @@ public class SalvoApplication {
             GamePlayer gamePlayer3 = new GamePlayer(player3, game2);
             GamePlayer gamePlayer4 = new GamePlayer(player4, game2);
 
-            //Creacion de ships
-            Ship ship1 = new Ship();
-            Ship ship2 = new Ship();
-            Ship ship3 = new Ship();
-            Ship ship4 = new Ship();
-            Ship ship5 = new Ship();
-            Ship ship6 = new Ship();
-            Ship ship7 = new Ship();
-            Ship ship8 = new Ship();
-
 
             //por consigna quiere que le modifiquemos la hora para que aparezca una hora despues del anterior
             Date newDate = Date.from(game1.getCreationDate().toInstant().plusSeconds(3600));
@@ -65,68 +52,56 @@ public class SalvoApplication {
             Date newDateFor3 = Date.from(game2.getCreationDate().toInstant().plusSeconds(3600));
             game3.setCreationDate(newDateFor3);
 
-            ship1.setTypeShip("Destroyer");
-            ship5.setTypeShip("Destroyer");
-            ship2.setTypeShip("Comando");
-            ship6.setTypeShip("Comando");
-            ship3.setTypeShip("Submarine");
-            ship7.setTypeShip("Submarine");
-            ship4.setTypeShip("Patrol Boat");
-            ship8.setTypeShip("Patrol Boat");
 
-            //Asigno las locations a los barcos
-            //todo esta es la unica forma de hacer esto?? es un choclo
-            ship1.setLocations(new ArrayList<>(Arrays.asList("A1", "H1", "C1")));
-            ship2.setLocations(new ArrayList<>(Arrays.asList("A2", "H2", "C2")));
-            ship3.setLocations(new ArrayList<>(Arrays.asList("A3", "H3", "C3")));
-            ship4.setLocations(new ArrayList<>(Arrays.asList("A4", "H4", "C4")));
-            ship5.setLocations(new ArrayList<>(Arrays.asList("A5", "H5", "C5")));
-            ship6.setLocations(new ArrayList<>(Arrays.asList("A6", "H6", "C6")));
-            ship7.setLocations(new ArrayList<>(Arrays.asList("A7", "H7", "C7")));
-            ship8.setLocations(new ArrayList<>(Arrays.asList("A8", "H8", "C8")));
+            List<String> shipLocation1 = new ArrayList<>();
+            shipLocation1.add("B5");
+            shipLocation1.add("B6");
+            shipLocation1.add("B7");
 
+            List<String> shipLocation2 = new LinkedList<>();
+            shipLocation2.add("A1");
+            shipLocation2.add("A2");
+            shipLocation2.add("A3");
 
-            gamePlayer1.addShip(ship1);
-            gamePlayer1.addShip(ship2);
-            gamePlayer1.addShip(ship3);
-            gamePlayer1.addShip(ship4);
+            List<String> shipLocation3 = new LinkedList<>();
+            shipLocation3.add("C1");
+            shipLocation3.add("C2");
+            shipLocation3.add("C3");
 
-            //Como un ship va solo en un gamePlayer, esta porcion de codigo me generaba problemas
-            //El ship se guardaba en el gamePlayer1, y luego se movia al gamePlayer2
-            //  gamePlayer2.addShip(ship1);
-            gamePlayer2.addShip(ship5);
-            gamePlayer2.addShip(ship6);
-            gamePlayer2.addShip(ship7);
-            gamePlayer2.addShip(ship8);
+            List<String> shipLocation4 = new LinkedList<>();
+            shipLocation4.add("D1");
+            shipLocation4.add("D2");
+            shipLocation4.add("D3");
+
+            Ship ship1 = new Ship("Comando1", gamePlayer1, shipLocation1);
+            Ship ship2 = new Ship("Comando2", gamePlayer1, shipLocation2);
+            Ship ship3 = new Ship("Comando3", gamePlayer2, shipLocation3);
+            Ship ship4 = new Ship("Comando4", gamePlayer2, shipLocation4);
 
 
             //Creo listas para enviar toda la informacion en menos mensajes.
-            List<Player> playerList = new ArrayList<Player>();
+            List<Player> playerList = new LinkedList<>();
             playerList.add(player1);
             playerList.add(player2);
             playerList.add(player3);
             playerList.add(player4);
 
-            List<Game> gameList = new ArrayList<Game>();
+            List<Game> gameList = new LinkedList<>();
             gameList.add(game1);
             gameList.add(game2);
             gameList.add(game3);
 
-            List<GamePlayer> gamePlayerList = new ArrayList<GamePlayer>();
+            List<GamePlayer> gamePlayerList = new LinkedList<>();
             gamePlayerList.add(gamePlayer1);
             gamePlayerList.add(gamePlayer2);
             gamePlayerList.add(gamePlayer3);
             gamePlayerList.add(gamePlayer4);
 
-            List<Ship> shipList = new ArrayList<Ship>();
+            List<Ship> shipList = new LinkedList<>();
             shipList.add(ship1);
             shipList.add(ship2);
             shipList.add(ship3);
             shipList.add(ship4);
-            shipList.add(ship5);
-            shipList.add(ship6);
-            shipList.add(ship7);
-            shipList.add(ship8);
 
             //Guardar en la base de datos
             gameRepository.saveAll(gameList);
