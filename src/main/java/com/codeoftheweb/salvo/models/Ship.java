@@ -34,11 +34,8 @@ public class Ship {
 
     public Map<String, Object> makeShipDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("id", id);
         dto.put("type", typeShip);
         dto.put("location", locations);
-        //todo fijarse que mas agregar
-        dto.put("gamePlayers", this.getGamePlayer().makeGamePlayerDTO());
         return dto;
     }
 

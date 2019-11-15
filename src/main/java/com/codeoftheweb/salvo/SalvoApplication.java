@@ -65,12 +65,25 @@ public class SalvoApplication {
             Date newDateFor3 = Date.from(game2.getCreationDate().toInstant().plusSeconds(3600));
             game3.setCreationDate(newDateFor3);
 
+            ship1.setTypeShip("Destroyer");
+            ship5.setTypeShip("Destroyer");
+            ship2.setTypeShip("Comando");
+            ship6.setTypeShip("Comando");
+            ship3.setTypeShip("Submarine");
+            ship7.setTypeShip("Submarine");
+            ship4.setTypeShip("Patrol Boat");
+            ship8.setTypeShip("Patrol Boat");
+
             //Asigno las locations a los barcos
             //todo esta es la unica forma de hacer esto?? es un choclo
             ship1.setLocations(new ArrayList<>(Arrays.asList("A1", "H1", "C1")));
             ship2.setLocations(new ArrayList<>(Arrays.asList("A2", "H2", "C2")));
             ship3.setLocations(new ArrayList<>(Arrays.asList("A3", "H3", "C3")));
             ship4.setLocations(new ArrayList<>(Arrays.asList("A4", "H4", "C4")));
+            ship5.setLocations(new ArrayList<>(Arrays.asList("A5", "H5", "C5")));
+            ship6.setLocations(new ArrayList<>(Arrays.asList("A6", "H6", "C6")));
+            ship7.setLocations(new ArrayList<>(Arrays.asList("A7", "H7", "C7")));
+            ship8.setLocations(new ArrayList<>(Arrays.asList("A8", "H8", "C8")));
 
 
             gamePlayer1.addShip(ship1);
@@ -80,10 +93,7 @@ public class SalvoApplication {
 
             //Como un ship va solo en un gamePlayer, esta porcion de codigo me generaba problemas
             //El ship se guardaba en el gamePlayer1, y luego se movia al gamePlayer2
-            //gamePlayer2.addShip(ship1);
-            //gamePlayer2.addShip(ship2);
-            //gamePlayer2.addShip(ship3);
-            //gamePlayer2.addShip(ship4);
+            //  gamePlayer2.addShip(ship1);
             gamePlayer2.addShip(ship5);
             gamePlayer2.addShip(ship6);
             gamePlayer2.addShip(ship7);

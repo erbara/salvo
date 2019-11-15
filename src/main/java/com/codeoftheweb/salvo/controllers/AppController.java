@@ -2,7 +2,6 @@ package com.codeoftheweb.salvo.controllers;
 
 import com.codeoftheweb.salvo.models.Game;
 import com.codeoftheweb.salvo.models.GamePlayer;
-import com.codeoftheweb.salvo.models.Player;
 import com.codeoftheweb.salvo.repositories.GamePlayerRepository;
 import com.codeoftheweb.salvo.repositories.GameRepository;
 import com.codeoftheweb.salvo.repositories.PlayerRepository;
@@ -91,26 +90,32 @@ public class AppController {
         List<GamePlayer> gamePlayersList = new ArrayList<>();
         gamePlayersList.addAll(game.getGamePlayers());
 
-        //todo - segun la consigna, esto tendria que ser una lista, y hay algo que me esta faltando.
         gamePlayerDTO.put("gamePlayers", gamePlayersList.stream()
                 .map(_gamePlayerList -> _gamePlayerList.makeGamePlayerDTO())
+        );
+
+        gamePlayerDTO.put("ships", gamePlayer.getShips()
+                .stream()
+                .map(ship -> ship.makeShipDTO())
         );
 
         return gamePlayerDTO;
     }
 
-    //esto fue para explicar algo, no es parte de la consigna
-    @RequestMapping("/miUrl")
-    public List<String> example() {
 
-        List<String> lista = new ArrayList<>();
+//    //esto fue para explicar algo, no es parte de la consigna
+//    @RequestMapping("/miUrl")
+//    public List<String> example() {
+//
+//        List<String> lista = new ArrayList<>();
+//
+//        lista.add("David");
+//        lista.add("ASDasdasd");
+//        lista.add("Erci");
+//
+//        return lista;
+//    }
 
-        lista.add("David");
-        lista.add("ASDasdasd");
-        lista.add("Erci");
-
-        return lista;
-    }
 
 
     //SETTERS y GETTERS
