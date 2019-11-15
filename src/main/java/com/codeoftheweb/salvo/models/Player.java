@@ -25,7 +25,8 @@ public class Player {
 
 
     //CONSTRUCTORES
-    public Player(){} // constructor vacio necesario para la DB
+    public Player() {
+    } // constructor vacio necesario para la DB
 
     public Player(String userName) {
         this.userName = userName;
@@ -36,7 +37,7 @@ public class Player {
     public Map<String, Object> makePlayerDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
-        dto.put("email", this.getUserName()); //ACA ESTABA EL ERROR
+        dto.put("email", this.getUserName());
 
         return dto;
     }

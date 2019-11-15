@@ -3,7 +3,6 @@ package com.codeoftheweb.salvo.models;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,34 +12,33 @@ import java.util.Map;
 public class Ship {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native" )
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
-    //todo queda asi?
+    //todo- falta definir el tipo de los barcos
     private String typeShip;
 
     @ElementCollection
-    @Column(name="location")
+    @Column(name = "location")
     private List<String> locations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="gamePlayer_id")
+    @JoinColumn(name = "gamePlayer_id")
     private GamePlayer gamePlayer;
 
 
     //CONSTRUCTORES
-    public Ship(){
-
+    public Ship() {
     }
 
-
     public Map<String, Object> makeShipDTO() {
-        Map<String, Object>dto = new LinkedHashMap<>();
-        dto.put("id", this.getId());
-        dto.put("type", this.typeShip);
-        dto.put("location", this.getLocations());
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", id);
+        dto.put("type", typeShip);
+        dto.put("location", locations);
         //todo fijarse que mas agregar
+        dto.put("gamePlayers", this.getGamePlayer().makeGamePlayerDTO());
         return dto;
     }
 

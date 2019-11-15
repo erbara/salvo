@@ -2,6 +2,7 @@ package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -21,27 +22,31 @@ public class Game {
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<GamePlayer> gamePlayers;
 
-
     //CONSTRUCTORES
-    public Game(){
+    public Game() {
         this.creationDate = new Date();
+
     } // constructor vacio necesario
 
     public Game(Date creationDate) {
-        this.creationDate = new Date();
+        this.creationDate = creationDate;
     }
-
+    //error mio anterior -> recibia por parametro la fecha pero no la asignaba, sino la que creaba de nuevo
+           /*  public Game(Date creationDate) {
+                 this.creationDate = new Date();
+               }
+           */
 
     @RequestMapping
     public Map<String, Object> makeGameDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("id", this.getId()); //ESTOS NOMBRES id, create, gamePlayer son lo que hay que respetar porque asi se setearon en el jason
-        dto.put("created" , this.getCreationDate());
+        dto.put("id", this.getId()); //ESTOS NOMBRES id, create, gamePlayer son lo que hay que respetar porque asi se settearon en el jason
+        dto.put("created", this.getCreationDate());
 
-        dto.put("gamePlayers" , this.getGamePlayers()
-                                     .stream()
-                                     .map(gamePlayer -> gamePlayer.makeGamePlayerDTO())
-                                     .collect(Collectors.toList()));
+        dto.put("gamePlayers", this.getGamePlayers()
+                .stream()
+                .map(gamePlayer -> gamePlayer.makeGamePlayerDTO())
+                .collect(Collectors.toList()));
 
         return dto;
     }

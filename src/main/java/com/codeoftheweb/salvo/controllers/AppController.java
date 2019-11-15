@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
 
 //t0do lo que nos devuelve el controller es un JSON
 @RestController //hace la serelisacion de nuestros metodos.
@@ -35,7 +33,7 @@ public class AppController {
     GamePlayerRepository gamePlayerRepository;
 
     @RequestMapping("/ships")
-    public List<Object> getShipsAll(){
+    public List<Object> getShipsAll() {
 
         return shipRepository.findAll()
                 .stream()
@@ -54,7 +52,7 @@ public class AppController {
     //genero una lista, los hizo stream, los modifico (los hizo un mapa) para poder pasar la informacion de una forma particular, y luego los vuelve a hacer una lista.
 
     @RequestMapping("/players")
-    public List<Object> getPlayersAll(){
+    public List<Object> getPlayersAll() {
         return playerRepository.findAll()
                 .stream()
                 .map(player -> player.makePlayerDTO())
@@ -75,56 +73,35 @@ public class AppController {
     @RequestMapping("/game_view/{nn}")
     public Map<String, Object> getGamePlayerInformation(@PathVariable("nn") Long gamePlayerID) {
 
-        Map<String, Object> gamePlayerDto = new LinkedHashMap<>();
+        Optional<GamePlayer> gamePlayerOptional = gamePlayerRepository.findById(gamePlayerID);
+        //el valor puede existir o no. voy a usar esto de paso intermedio para que me permita crear el objeto
 
-        //busco la coincidencia
-        GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerID).get();
+        GamePlayer gamePlayer = gamePlayerOptional.get();
+        //aca obtengo el objeto. si fuera nulo, saldria un error de Java de pointer Null Exception.
+
+
+        Map<String, Object> gamePlayerDTO = new LinkedHashMap<>();
+
+        gamePlayerDTO.put("id", gamePlayerID);
+
         Game game = gamePlayer.getGame();
+        gamePlayerDTO.put("created", game.getCreationDate());
 
-        gamePlayerDto.put("id", gamePlayer.getId());
-        gamePlayerDto.put("created", game.getCreationDate());
+        //obtengo, del Game, la info de ambos GamePlayers
+        List<GamePlayer> gamePlayersList = new ArrayList<>();
+        gamePlayersList.addAll(game.getGamePlayers());
 
-        List<GamePlayer> gamePlayerList = gamePlayerRepository.findAll()
-                .stream()
-                .filter(gamePlayer1 -> gamePlayer1.getGame().getId() == game.getId())
-                .collect(Collectors.toList());
+        //todo - segun la consigna, esto tendria que ser una lista, y hay algo que me esta faltando.
+        gamePlayerDTO.put("gamePlayers", gamePlayersList.stream()
+                .map(_gamePlayerList -> _gamePlayerList.makeGamePlayerDTO())
+        );
 
-        //List<GamePlayer> gamePlayersList = gamePlayerRepository.findAll()
-//                .stream()
-//                .filter(gamePlayer1 -> gamePlayer1.getGame().getId() == playerID )
-        //              .collect(Collectors.toList());
-
-        //gamePlayerDto.put("gamePlayers", gamePlayersList.stream().map(gamePlayer2 -> gamePlayer2.makeGamePlayerDTO()).collect(Collectors.toList()));
-
-        gamePlayerDto.put("gamePlayers", gamePlayerList.stream().map(gamePlayer1 -> gamePlayer1.makeGamePlayerDTO()).collect(Collectors.toList()));
-
-        return gamePlayerDto;
-
-  /*  public Map<String, Object> getGameInformation(@PathVariable("nn") Long gameID) {
-
-
-        Map<String, Object> dto = new LinkedHashMap<>();
-
-        //busco la coincidencia
-        Game game = gameRepository.getOne(gameID);
-        dto.put("id", game.getId());
-        dto.put("created", game.getCreationDate());
-
-        List<GamePlayer> gamePlayersList = gamePlayerRepository.findAll()
-                .stream()
-                .filter(gamePlayer1 -> gamePlayer1.getGame().getId() == gameID )
-                .collect(Collectors.toList());
-
-        dto.put("gamePlayers", gamePlayersList.stream().map(gamePlayer -> gamePlayer.makeGamePlayerDTO()).collect(Collectors.toList()));
-
-        return dto;
-    }
-*/
+        return gamePlayerDTO;
     }
 
     //esto fue para explicar algo, no es parte de la consigna
     @RequestMapping("/miUrl")
-    public List<String>example(){
+    public List<String> example() {
 
         List<String> lista = new ArrayList<>();
 
@@ -136,25 +113,23 @@ public class AppController {
     }
 
 
-
-
     //SETTERS y GETTERS
 
-        public GameRepository getGameRepository() {
-            return gameRepository;
-        }
+    public GameRepository getGameRepository() {
+        return gameRepository;
+    }
 
-        public void setGameRepository(GameRepository gameRepository) {
-            this.gameRepository = gameRepository;
-        }
+    public void setGameRepository(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
+    }
 
-        public PlayerRepository getPlayerRepository() {
-            return playerRepository;
-        }
+    public PlayerRepository getPlayerRepository() {
+        return playerRepository;
+    }
 
-        public void setPlayerRepository(PlayerRepository playerRepository) {
-            this.playerRepository = playerRepository;
-        }
+    public void setPlayerRepository(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
+    }
 
 
 }
