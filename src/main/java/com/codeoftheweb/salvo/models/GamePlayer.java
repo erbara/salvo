@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.bind.annotation.RequestMapping;
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class GamePlayer {
@@ -25,6 +26,9 @@ public class GamePlayer {
 
     @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
     private Set<Ship> ships;
+
+    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    private Set<Salvo> salvoes;
 
     //CONSTRUCTORES
 
@@ -87,4 +91,15 @@ public class GamePlayer {
         return ships;
     }
 
+    public void setShips(Set<Ship> ships) {
+        this.ships = ships;
+    }
+
+    public Set<Salvo> getSalvoes() {
+        return salvoes;
+    }
+
+    public void setSalvoes(Set<Salvo> salvoes) {
+        this.salvoes = salvoes;
+    }
 }

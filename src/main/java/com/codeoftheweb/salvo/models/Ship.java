@@ -1,6 +1,8 @@
 package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,16 +13,18 @@ import java.util.Map;
 @Entity
 public class Ship {
 
+    public enum TypeShip { CARRIER, BATTLESHIP, SUBMARINE, DESTROYER, PATROLBOAT};
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
     //todo- falta definir el tipo de los barcos
-    private String typeShip;
+    private TypeShip typeShip;
 
     @ElementCollection
-//    @Column(name = "location")
+//    @Column(name = "locations")
     private List<String> locations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -33,14 +37,14 @@ public class Ship {
     public Ship() {
     }
 
-    public Ship(String typeShip, GamePlayer gamePlayer, List shipLocation){
+    public Ship(TypeShip typeShip, GamePlayer gamePlayer, List shipLocation){
         this.typeShip = typeShip;
         this.gamePlayer = gamePlayer;
         this.locations = shipLocation;
 
     }
 
-
+    @RequestMapping
     public Map<String, Object> makeShipDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("type", typeShip);
@@ -55,11 +59,11 @@ public class Ship {
         return id;
     }
 
-    public String getTypeShip() {
+    public TypeShip getTypeShip() {
         return typeShip;
     }
 
-    public void setTypeShip(String typeShip) {
+    public void setTypeShip(TypeShip typeShip) {
         this.typeShip = typeShip;
     }
 

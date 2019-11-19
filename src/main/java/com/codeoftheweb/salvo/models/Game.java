@@ -43,7 +43,7 @@ public class Game {
     @RequestMapping
     public Map<String, Object> makeGameDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("id", this.getId()); //ESTOS NOMBRES id, create, gamePlayer son lo que hay que respetar porque asi se settearon en el jason
+        dto.put("id", this.getId());
         dto.put("created", this.getCreationDate());
 
         dto.put("gamePlayers", this.getGamePlayers()
