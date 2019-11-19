@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,8 +20,10 @@ public class Player {
     private String userName;
 
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
-    private Set<GamePlayer> gamePlayers;
+    private Set<GamePlayer> gamePlayers = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+    private Set<Score> score = new LinkedHashSet<>();
 
     //CONSTRUCTORES
 
@@ -64,5 +67,11 @@ public class Player {
         this.userName = userName;
     }
 
+    public Set<Score> getScore() {
+        return score;
+    }
 
+    public void setScore(Set<Score> score) {
+        this.score = score;
+    }
 }

@@ -20,7 +20,6 @@ public class Ship {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
-    //todo- falta definir el tipo de los barcos
     private TypeShip typeShip;
 
     @ElementCollection

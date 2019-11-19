@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -23,7 +24,8 @@ public class SalvoApplication {
                                       GameRepository gameRepository,
                                       GamePlayerRepository gamePlayerRepository,
                                       ShipRepository shipRepository,
-                                      SalvoRepository salvoRepository) {
+                                      SalvoRepository salvoRepository,
+                                      ScoreRepository scoreRepository) {
         return (args) -> {
 
             //Creacion de jugadores
@@ -67,6 +69,10 @@ public class SalvoApplication {
             GamePlayer gamePlayer15 = new GamePlayer(player_kBauer, game8); //game8
             GamePlayer gamePlayer16 = new GamePlayer(player_almeida, game8); //game8
 
+            //creacion de scores
+            Score score1 = new Score(game1,player_jBauer);
+            Score score2 = new Score(game1, player_obrian);
+
 
 
             //por consigna quiere que le modifiquemos la hora para que aparezca una hora despues del anterior
@@ -95,7 +101,7 @@ public class SalvoApplication {
             Ship ship9 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer4, new ArrayList<String>(Arrays.asList("G6", "H6")));
 
             //ships game 3
-            Ship ship10 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer5, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
+            Ship ship10 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer5, new ArrayList<>(Arrays.asList("B5", "C5", "D5")));
             Ship ship11 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer5, new ArrayList<String>(Arrays.asList("C6", "C7")));
             Ship ship12 = new Ship(Ship.TypeShip.SUBMARINE, gamePlayer6, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
             Ship ship13 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer6, new ArrayList<String>(Arrays.asList("G6", "H6")));
@@ -202,6 +208,10 @@ public class SalvoApplication {
             salvoList.addAll(new ArrayList<>(Arrays.asList(salvo_GamePlayer9_Turn1, salvo_GamePlayer9_Turn2, salvo_GamePlayer10_Turn1, salvo_GamePlayer10_Turn2, salvo_GamePlayer10_Turn3)));
 
 
+            List<Score> scoreList = new LinkedList<>();
+            scoreList.addAll(new ArrayList<>(Arrays.asList(score1, score2)));
+
+
 
             //Guardar en la base de datos
             gameRepository.saveAll(gameList);
@@ -209,6 +219,7 @@ public class SalvoApplication {
             gamePlayerRepository.saveAll(gamePlayerList);
             shipRepository.saveAll(shipList);
             salvoRepository.saveAll(salvoList);
+            scoreRepository.saveAll(scoreList);
         };
     }
 

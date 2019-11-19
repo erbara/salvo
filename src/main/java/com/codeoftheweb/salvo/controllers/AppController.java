@@ -31,6 +31,9 @@ public class AppController {
     @Autowired
     SalvoRepository salvoRepository;
 
+    @Autowired
+    ScoreRepository scoreRepository;
+
     @RequestMapping("/ships")
     public List<Object> getShipsAll() {
 
@@ -83,10 +86,16 @@ public class AppController {
 
         dto.put("salvoes", gamePlayer.getGame().getGamePlayers()
                 .stream()
-                //.flatMap(_gamePlayer -> _gamePlayer.getSalvoes().stream().map(_salvo -> _salvo.makeSalvoDTO()))
                 .flatMap(_gamePlayer -> _gamePlayer.getSalvoes().stream().map(_salvo -> _salvo.makeSalvoDTO()))
+                //.flatMap(_gamePlayer -> _gamePlayer.getSalvoes().stream().map(_salvo -> _salvo.makeSalvoDTO()))
                 .collect(Collectors.toList())
         );
+
+//        dto.put("salvoes", gamePlayer.getGame().getAllSalvoes());
+
+
+
+
 
         return dto;
     }

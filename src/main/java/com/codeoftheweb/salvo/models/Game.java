@@ -4,10 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -20,7 +17,10 @@ public class Game {
     private Date creationDate;
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
-    private Set<GamePlayer> gamePlayers;
+    private Set<GamePlayer> gamePlayers = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+    private Set<Score> score = new LinkedHashSet<>();
 
 
     //CONSTRUCTORES
@@ -55,6 +55,18 @@ public class Game {
     }
 
 
+//    @RequestMapping
+//    public Map<String, Object> getAllSalvoes(){
+//        Map<String, Object> dto = new LinkedHashMap<>();
+//
+//        this.getGamePlayers().stream()
+//                .flatMap(_gamePlayer -> _gamePlayer.getSalvoes().stream().map(_salvo -> _salvo.makeSalvoDTO()))
+//                .collect(Collectors.toList());
+//
+//        return
+//    }
+
+
     //SETTERS y GETTERS
 
     public Set<GamePlayer> getGamePlayers() {
@@ -77,4 +89,11 @@ public class Game {
         this.creationDate = creationDate;
     }
 
+    public Set<Score> getScore() {
+        return score;
+    }
+
+    public void setScore(Set<Score> score) {
+        this.score = score;
+    }
 }
