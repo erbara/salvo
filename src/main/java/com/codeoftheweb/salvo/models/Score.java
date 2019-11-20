@@ -4,9 +4,7 @@ package com.codeoftheweb.salvo.models;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Score {
@@ -24,18 +22,34 @@ public class Score {
     @JoinColumn(name = "player_id")
     private Player player;
 
-    private int score;
+    private double score;
 
     private Date finishDate;
 
     //CONSTRUCTORS
-    public Score(){}
+    public Score() {
 
-    public Score(Game game, Player player){
+    }
+
+    public Score(Game game, Player player) {
         this.game = game;
         this.player = player;
     }
 
+
+    public Map<String, Object> makeScoreDTO() {
+
+        Map<String, Object> dto = new HashMap<>();
+
+        dto.put("player", player.getId());
+        dto.put("finishDate", finishDate);
+        dto.put("score", score);
+
+        return dto;
+    }
+
+
+    //SETTERS y GETTERS
 
     public long getId() {
         return id;
@@ -61,11 +75,11 @@ public class Score {
         this.player = player;
     }
 
-    public int getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(double score) {
         this.score = score;
     }
 
@@ -76,4 +90,5 @@ public class Score {
     public void setFinishDate(Date finishDate) {
         this.finishDate = finishDate;
     }
+
 }

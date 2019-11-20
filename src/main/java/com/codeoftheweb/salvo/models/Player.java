@@ -4,10 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Player {
@@ -23,7 +20,7 @@ public class Player {
     private Set<GamePlayer> gamePlayers = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
-    private Set<Score> score = new LinkedHashSet<>();
+    private Set<Score> scores = new LinkedHashSet<>();
 
     //CONSTRUCTORES
 
@@ -32,6 +29,44 @@ public class Player {
 
     public Player(String userName) {
         this.userName = userName;
+    }
+
+
+    public Score getOneScore(GamePlayer gamePlayer) {
+        Score score = scores.stream()
+                .filter(_score -> _score.getGame() == gamePlayer.getGame())
+                .findFirst()
+                .orElse(null);
+        return score;
+    }
+
+
+    public HashMap<String, Object> showAllScores() {
+
+        HashMap<String, Object> dto = new LinkedHashMap<>();
+
+        dto.put("player", this.makePlayerDTO());
+        dto.put("totalScores", scores.stream()
+                .map(_score -> _score.getScore())
+                .reduce((double) 0, Double::sum)
+        );
+        dto.put("totalWins", scores.stream()
+                .map(_score -> _score.getScore())
+                .filter(_score -> _score == 1)
+                .reduce((double) 0, Double::sum)
+        );
+        dto.put("totalLosses", scores.stream()
+                .map(_score -> _score.getScore())
+                .filter(_score -> _score == 0)
+                .reduce((double) 0, Double::sum)
+        );
+        dto.put("totalTies", scores.stream()
+                .map(_score -> _score.getScore())
+                .filter(_score -> _score == 0.5)
+                .reduce((double) 0, Double::sum)
+        );
+
+        return dto;
     }
 
 
@@ -67,11 +102,13 @@ public class Player {
         this.userName = userName;
     }
 
-    public Set<Score> getScore() {
-        return score;
+    public Set<Score> getScores() {
+        return scores;
     }
 
-    public void setScore(Set<Score> score) {
-        this.score = score;
+    public void setScore(Set<Score> scores) {
+        this.scores = scores;
     }
+
+
 }

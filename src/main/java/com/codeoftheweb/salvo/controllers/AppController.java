@@ -3,6 +3,7 @@ package com.codeoftheweb.salvo.controllers;
 import com.codeoftheweb.salvo.models.Game;
 import com.codeoftheweb.salvo.models.GamePlayer;
 import com.codeoftheweb.salvo.repositories.*;
+import org.aspectj.weaver.patterns.HasMemberTypePattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,8 +49,9 @@ public class AppController {
 
         return gameRepository.findAll()
                 .stream()
-                .map(game -> game.makeGameDTO()) //
-                .collect(Collectors.toList());
+                .map(game -> game.makeGameDTO())
+                .collect(Collectors.toList())
+                ;
     }
 
     @RequestMapping("/players")
@@ -57,8 +59,38 @@ public class AppController {
         return playerRepository.findAll()
                 .stream()
                 .map(player -> player.makePlayerDTO())
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+                ;
     }
+
+
+    @RequestMapping("/leaderboard")
+    public List<Object> showLeaderBoard() {
+
+//        HashMap<List, Object> dto = new HashMap<>();
+
+//        dto.put("playerId", )
+
+        return playerRepository.findAll()
+                .stream()
+                .map(player -> player.showAllScores())
+                .collect(Collectors.toList())
+                ;
+
+//        return playerRepository.findAll()
+//                .stream()
+//                .map(player -> player.showAllScores())
+//                .collect(Collectors.toList())
+//                ;
+
+
+
+
+
+
+
+    }
+
 
     @RequestMapping("/game_view/{nn}")
     public Map<String, Object> getGamePlayerInformation(@PathVariable("nn") Long gamePlayerID) {
@@ -91,10 +123,7 @@ public class AppController {
                 .collect(Collectors.toList())
         );
 
-//        dto.put("salvoes", gamePlayer.getGame().getAllSalvoes());
-
-
-
+// todo       dto.put("salvoes", gamePlayer.getGame().getAllSalvoes());
 
 
         return dto;

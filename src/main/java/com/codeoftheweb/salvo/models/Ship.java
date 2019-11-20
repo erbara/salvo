@@ -13,7 +13,10 @@ import java.util.Map;
 @Entity
 public class Ship {
 
-    public enum TypeShip { CARRIER, BATTLESHIP, SUBMARINE, DESTROYER, PATROLBOAT};
+    public enum TypeShip {CARRIER, BATTLESHIP, SUBMARINE, DESTROYER, PATROLBOAT}
+
+    ;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -23,7 +26,7 @@ public class Ship {
     private TypeShip typeShip;
 
     @ElementCollection
-//    @Column(name = "locations")
+    @Column(name = "shipLocations")
     private List<String> locations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -36,7 +39,7 @@ public class Ship {
     public Ship() {
     }
 
-    public Ship(TypeShip typeShip, GamePlayer gamePlayer, List shipLocation){
+    public Ship(TypeShip typeShip, GamePlayer gamePlayer, List shipLocation) {
         this.typeShip = typeShip;
         this.gamePlayer = gamePlayer;
         this.locations = shipLocation;

@@ -7,7 +7,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -71,7 +70,28 @@ public class SalvoApplication {
 
             //creacion de scores
             Score score1 = new Score(game1,player_jBauer);
-            Score score2 = new Score(game1, player_obrian);
+            Score score2 = new Score(game1, player_obrian); //
+
+            Score score3 = new Score(game2, player_jBauer);
+            Score score4 = new Score(game2, player_obrian);//game2
+
+            Score score5 = new Score(game3, player_obrian);//game3
+            Score score6 = new Score(game3, player_almeida);
+
+            Score score7 = new Score(game4, player_obrian);//game4
+            Score score8 = new Score(game4, player_jBauer);
+
+            Score score9 = new Score(game5, player_almeida);//game5
+            Score score10 = new Score(game5, player_jBauer);
+
+//            Score score11 = new Score(game6, player_obrian);//game6
+//            Score score12 = new Score(game6, player_obrian);
+
+//            Score score13 = new Score(game7, player_obrian);//game7
+//            Score score14 = new Score(game7, player_obrian);
+
+            Score score15 = new Score(game8, player_kBauer);//game8
+            Score score16 = new Score(game8, player_almeida);
 
 
 
@@ -163,6 +183,18 @@ public class SalvoApplication {
             Salvo salvo_GamePlayer10_Turn3 = new Salvo(gamePlayer10, 3, new ArrayList<String>(Arrays.asList("H1", "H8")));
 
 
+            //Simulando cosas que pasan DURANTE la partida
+
+            score1.setScore(1);
+            score2.setScore(0);
+            score3.setScore(0.5);
+            score4.setScore(0.5);
+
+
+
+
+
+
             //Creo listas para enviar toda la informacion en menos mensajes.
             List<Player> playerList = new LinkedList<>();
             playerList.addAll(new ArrayList<>(Arrays.asList(player_jBauer, player_obrian, player_kBauer, player_almeida)));
@@ -209,8 +241,9 @@ public class SalvoApplication {
 
 
             List<Score> scoreList = new LinkedList<>();
-            scoreList.addAll(new ArrayList<>(Arrays.asList(score1, score2)));
-
+            scoreList.addAll(new ArrayList<>(Arrays.asList(score1, score2, score3, score4, score5, score6, score7, score8, score9, score10)));
+//            scoreList.addAll(new ArrayList<>(Arrays.asList(score11, score12, score13, score14)));
+            scoreList.addAll(new ArrayList<>(Arrays.asList(score15, score16)));
 
 
             //Guardar en la base de datos

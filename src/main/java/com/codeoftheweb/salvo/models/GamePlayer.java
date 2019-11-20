@@ -43,18 +43,20 @@ public class GamePlayer {
         this.player = player;
     }
 
+    public Score getScore() {
+        return player.getOneScore(this);
+    }
+
+
     @RequestMapping
     public Map<String, Object> makeGamePlayerDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("player", this.getPlayer().makePlayerDTO());
 
+//        dto.put("score", this.getScore().makeScoreDTO());
+
         return dto;
-    }
-
-
-    public void addShip(Ship ship) {
-        ship.setGamePlayer(this);
     }
 
 
@@ -94,6 +96,10 @@ public class GamePlayer {
 
     public void setShips(Set<Ship> ships) {
         this.ships = ships;
+    }
+
+    public void addShip(Ship ship) {
+        ship.setGamePlayer(this);
     }
 
     public Set<Salvo> getSalvoes() {
