@@ -1,7 +1,6 @@
 package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;

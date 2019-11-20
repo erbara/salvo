@@ -62,18 +62,6 @@ public class Game {
     }
 
 
-//    @RequestMapping
-//    public Map<String, Object> getAllSalvoes(){
-//        Map<String, Object> dto = new LinkedHashMap<>();
-//
-//        this.getGamePlayers().stream()
-//                .flatMap(_gamePlayer -> _gamePlayer.getSalvoes().stream().map(_salvo -> _salvo.makeSalvoDTO()))
-//                .collect(Collectors.toList());
-//
-//        return
-//    }
-
-
     //SETTERS y GETTERS
 
     public Set<GamePlayer> getGamePlayers() {

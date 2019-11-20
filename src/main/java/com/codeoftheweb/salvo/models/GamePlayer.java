@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 public class GamePlayer {
@@ -53,8 +52,6 @@ public class GamePlayer {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("player", this.getPlayer().makePlayerDTO());
-
-//        dto.put("score", this.getScore().makeScoreDTO());
 
         return dto;
     }

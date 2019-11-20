@@ -67,26 +67,12 @@ public class AppController {
     @RequestMapping("/leaderboard")
     public List<Object> showLeaderBoard() {
 
-//        HashMap<List, Object> dto = new HashMap<>();
-
-//        dto.put("playerId", )
 
         return playerRepository.findAll()
                 .stream()
                 .map(player -> player.showAllScores())
                 .collect(Collectors.toList())
                 ;
-
-//        return playerRepository.findAll()
-//                .stream()
-//                .map(player -> player.showAllScores())
-//                .collect(Collectors.toList())
-//                ;
-
-
-
-
-
 
 
     }
@@ -96,9 +82,6 @@ public class AppController {
     public Map<String, Object> getGamePlayerInformation(@PathVariable("nn") Long gamePlayerID) {
 
         GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerID).get();
-
-//        Game game = gamePlayer.getGame();
-//        Map<String, Object> dto = game.makeGameDTO();
 
         Map<String, Object> dto = new LinkedHashMap<>();
 
@@ -123,8 +106,8 @@ public class AppController {
                 .collect(Collectors.toList())
         );
 
-// todo       dto.put("salvoes", gamePlayer.getGame().getAllSalvoes());
-
+        // todo       dto.put("salvoes", gamePlayer.getGame().getAllSalvoes());
+        //para que quede mejor
 
         return dto;
     }

@@ -23,7 +23,6 @@ public class Salvo {
     @ElementCollection
     @Column(name = "locations")
     private List<String> locations = new ArrayList<>();
-//    private Set<String> salvoLocations = new LinkedHashSet<>();
 
     //CONSTRUCTORES
 
@@ -32,7 +31,6 @@ public class Salvo {
     }
 
     public Salvo(GamePlayer gamePlayer, int turn, List locations){
-        //hace falta asignar mas en el constructor?
         this.setGamePlayer(gamePlayer);
         this.setTurn(turn);
         this.setLocations(locations);
