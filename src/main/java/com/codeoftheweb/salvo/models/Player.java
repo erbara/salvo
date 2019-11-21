@@ -32,6 +32,8 @@ public class Player {
     }
 
 
+    //METODOS
+
     public Score getOneScore(GamePlayer gamePlayer) {
         Score score = scores.stream()
                 .filter(_score -> _score.getGame() == gamePlayer.getGame())
@@ -109,6 +111,5 @@ public class Player {
     public void setScore(Set<Score> scores) {
         this.scores = scores;
     }
-
 
 }

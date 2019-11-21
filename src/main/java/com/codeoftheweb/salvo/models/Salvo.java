@@ -26,15 +26,17 @@ public class Salvo {
 
     //CONSTRUCTORES
 
-    public Salvo(){
+    public Salvo() {
 
     }
 
-    public Salvo(GamePlayer gamePlayer, int turn, List locations){
+    public Salvo(GamePlayer gamePlayer, int turn, List locations) {
         this.setGamePlayer(gamePlayer);
         this.setTurn(turn);
         this.setLocations(locations);
     }
+
+    //METODOS
 
     @RequestMapping
     public Map<String, Object> makeSalvoDTO() {
@@ -46,7 +48,6 @@ public class Salvo {
 
         return dto;
     }
-
 
 
     //SETTERS Y GETTERS

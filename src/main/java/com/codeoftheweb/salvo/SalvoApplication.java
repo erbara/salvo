@@ -69,7 +69,7 @@ public class SalvoApplication {
             GamePlayer gamePlayer16 = new GamePlayer(player_almeida, game8); //game8
 
             //creacion de scores
-            Score score1 = new Score(game1,player_jBauer);
+            Score score1 = new Score(game1, player_jBauer);
             Score score2 = new Score(game1, player_obrian); //
 
             Score score3 = new Score(game2, player_jBauer);
@@ -92,7 +92,6 @@ public class SalvoApplication {
 
             Score score15 = new Score(game8, player_kBauer);//game8
             Score score16 = new Score(game8, player_almeida);
-
 
 
             //por consigna quiere que le modifiquemos la hora para que aparezca una hora despues del anterior
@@ -127,13 +126,13 @@ public class SalvoApplication {
             Ship ship13 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer6, new ArrayList<String>(Arrays.asList("G6", "H6")));
 
             //ships game 4
-            Ship ship14 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer7, new ArrayList<String>(Arrays.asList("B5", "C5" , "D5")));
+            Ship ship14 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer7, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
             Ship ship15 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer7, new ArrayList<String>(Arrays.asList("C6", "C7")));
-            Ship ship16 = new Ship(Ship.TypeShip.SUBMARINE, gamePlayer8, new ArrayList<String>(Arrays.asList("A2", "A3" , "A4")));
+            Ship ship16 = new Ship(Ship.TypeShip.SUBMARINE, gamePlayer8, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
             Ship ship17 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer8, new ArrayList<String>(Arrays.asList("G6", "H6")));
 
             //ships game 5
-            Ship ship18 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer9, new ArrayList<String>(Arrays.asList("B5", "C5" , "D5")));
+            Ship ship18 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer9, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
             Ship ship19 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer9, new ArrayList<String>(Arrays.asList("C6", "C7")));
             Ship ship20 = new Ship(Ship.TypeShip.SUBMARINE, gamePlayer10, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
             Ship ship21 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer10, new ArrayList<String>(Arrays.asList("G6", "H6")));
@@ -147,7 +146,6 @@ public class SalvoApplication {
             Ship ship25 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer15, new ArrayList<String>(Arrays.asList("C6", "C7")));
             Ship ship26 = new Ship(Ship.TypeShip.SUBMARINE, gamePlayer16, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
             Ship ship27 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer16, new ArrayList<String>(Arrays.asList("G6", "H6")));
-
 
 
             //creacion de salvoes
@@ -189,10 +187,10 @@ public class SalvoApplication {
             score2.setScore(0);
             score3.setScore(0.5);
             score4.setScore(0.5);
-
-
-
-
+//            score5.setScore(0.5);
+//            score6.setScore(0);
+//            score7.setScore(0.5);
+//            score8.setScore(0.5);
 
 
             //Creo listas para enviar toda la informacion en menos mensajes.
@@ -220,7 +218,6 @@ public class SalvoApplication {
             shipList.addAll(new ArrayList<>(Arrays.asList(ship18, ship19, ship20, ship21))); //game 5
 //            shipList.addAll(new ArrayList<>(Arrays.asList(ship22, ship23))); //game 6
             shipList.addAll(new ArrayList<>(Arrays.asList(ship24, ship25, ship26, ship27))); //game 8
-
 
 
             List<Salvo> salvoList = new LinkedList<>();

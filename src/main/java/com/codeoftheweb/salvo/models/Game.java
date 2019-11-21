@@ -33,12 +33,9 @@ public class Game {
     public Game(Date creationDate) {
         this.creationDate = creationDate;
     }
-    //error mio anterior -> recibia por parametro la fecha pero no la asignaba, sino la que creaba de nuevo
-           /*  public Game(Date creationDate) {
-                 this.creationDate = new Date();
-               }
-           */
 
+
+    //METODOS
 
     @RequestMapping
     public Map<String, Object> makeGameDTO() {

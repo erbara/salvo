@@ -37,6 +37,8 @@ public class Score {
     }
 
 
+    //METODOS
+
     public Map<String, Object> makeScoreDTO() {
 
         Map<String, Object> dto = new HashMap<>();

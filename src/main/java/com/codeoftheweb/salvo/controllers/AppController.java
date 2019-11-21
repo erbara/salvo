@@ -64,9 +64,8 @@ public class AppController {
     }
 
 
-    @RequestMapping("/leaderboard1")
+    @RequestMapping("/leaderboard")
     public List<Object> showLeaderBoard() {
-
 
         return playerRepository.findAll()
                 .stream()
@@ -76,19 +75,6 @@ public class AppController {
 
 
     }
-
-//    @RequestMapping("/leaderboard2")
-//    public Map<String, Object> showLeaderBoard() {
-//
-//
-//        return playerRepository.findAll()
-//                .stream()
-//                .map(player -> player.showAllScores())
-////                .collect(Collectors.toList())
-//                .collect()
-//                ;
-//    }
-
 
 
     @RequestMapping("/game_view/{nn}")

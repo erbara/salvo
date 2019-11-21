@@ -47,6 +47,8 @@ public class GamePlayer {
     }
 
 
+    //METODOS
+
     @RequestMapping
     public Map<String, Object> makeGamePlayerDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
