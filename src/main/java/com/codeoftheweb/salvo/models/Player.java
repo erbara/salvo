@@ -47,7 +47,7 @@ public class Player {
 
         HashMap<String, Object> dto = new LinkedHashMap<>();
 
-        dto.put("player", this.makePlayerDTO());
+        dto.put("player", this.makePlayerDto());
         dto.put("totalScores", scores.stream()
                 .map(_score -> _score.getScore())
                 .reduce((double) 0, Double::sum)
@@ -72,8 +72,7 @@ public class Player {
     }
 
 
-    @RequestMapping
-    public Map<String, Object> makePlayerDTO() {
+    public Map<String, Object> makePlayerDto() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("email", this.getUserName());

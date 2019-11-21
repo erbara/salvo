@@ -1,9 +1,7 @@
 package com.codeoftheweb.salvo.controllers;
 
-import com.codeoftheweb.salvo.models.Game;
 import com.codeoftheweb.salvo.models.GamePlayer;
 import com.codeoftheweb.salvo.repositories.*;
-import org.aspectj.weaver.patterns.HasMemberTypePattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +38,7 @@ public class AppController {
 
         return shipRepository.findAll()
                 .stream()
-                .map(ship -> ship.makeShipDTO())
+                .map(ship -> ship.makeShipDto())
                 .collect(Collectors.toList());
     }
 
@@ -49,7 +47,7 @@ public class AppController {
 
         return gameRepository.findAll()
                 .stream()
-                .map(game -> game.makeGameDTO())
+                .map(game -> game.makeGameDto())
                 .collect(Collectors.toList())
                 ;
     }
@@ -58,7 +56,7 @@ public class AppController {
     public List<Object> getPlayersAll() {
         return playerRepository.findAll()
                 .stream()
-                .map(player -> player.makePlayerDTO())
+                .map(player -> player.makePlayerDto())
                 .collect(Collectors.toList())
                 ;
     }
@@ -88,19 +86,19 @@ public class AppController {
         dto.put("created", gamePlayer.getGame().getCreationDate());
         dto.put("gamePlayers", gamePlayer.getGame().getGamePlayers()
                 .stream()
-                .map(_gamePlayer -> _gamePlayer.makeGamePlayerDTO())
+                .map(_gamePlayer -> _gamePlayer.makeGamePlayerDto())
                 .collect(Collectors.toList())
         );
 
         dto.put("ships", gamePlayer.getShips()
                 .stream()
-                .map(ship -> ship.makeShipDTO())
+                .map(ship -> ship.makeShipDto())
                 .collect(Collectors.toList())
         );
 
         dto.put("salvoes", gamePlayer.getGame().getGamePlayers()
                 .stream()
-                .flatMap(_gamePlayer -> _gamePlayer.getSalvoes().stream().map(_salvo -> _salvo.makeSalvoDTO()))
+                .flatMap(_gamePlayer -> _gamePlayer.getSalvoes().stream().map(_salvo -> _salvo.makeSalvoDto()))
                 //.flatMap(_gamePlayer -> _gamePlayer.getSalvoes().stream().map(_salvo -> _salvo.makeSalvoDTO()))
                 .collect(Collectors.toList())
         );

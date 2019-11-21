@@ -39,10 +39,9 @@ public class Score {
 
     //METODOS
 
-    public Map<String, Object> makeScoreDTO() {
+    public Map<String, Object> makeScoreDto() {
 
         Map<String, Object> dto = new HashMap<>();
-
         dto.put("player", player.getId());
         dto.put("finishDate", finishDate);
         dto.put("score", score);

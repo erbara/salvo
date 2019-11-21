@@ -201,40 +201,35 @@ public class SalvoApplication {
             gameList.addAll(new ArrayList<>(Arrays.asList(game1, game2, game3, game4, game5, game6, game7, game8)));
 
             List<GamePlayer> gamePlayerList = new LinkedList<>();
-            gamePlayerList.addAll(new ArrayList<>(Arrays.asList(gamePlayer1, gamePlayer2)));//game 1
-            gamePlayerList.addAll(new ArrayList<>(Arrays.asList(gamePlayer3, gamePlayer4)));//game 2
-            gamePlayerList.addAll(new ArrayList<>(Arrays.asList(gamePlayer5, gamePlayer6)));//game 3
-            gamePlayerList.addAll(new ArrayList<>(Arrays.asList(gamePlayer7, gamePlayer8)));//game 4
-            gamePlayerList.addAll(new ArrayList<>(Arrays.asList(gamePlayer9, gamePlayer10)));//game 5
-//            gamePlayerList.addAll(new ArrayList<>(Arrays.asList(gamePlayer11, gamePlayer12)));//game 6
-//            gamePlayerList.addAll(new ArrayList<>(Arrays.asList(gamePlayer13, gamePlayer14)));//game 7
-            gamePlayerList.addAll(new ArrayList<>(Arrays.asList(gamePlayer15, gamePlayer16)));//game 8
+            gamePlayerList.addAll(new ArrayList<>(Arrays.asList(gamePlayer1, gamePlayer2, //game1
+                                                                gamePlayer3, gamePlayer4, //game2
+                                                                gamePlayer5, gamePlayer6, //game3
+                                                                gamePlayer7, gamePlayer8, //game4
+                                                                gamePlayer9, gamePlayer10, //game5
+//                                                                gamePlayer11, gamePlayer12, //game6
+//                                                                gamePlayer13, gamePlayer14, //game7
+                                                                gamePlayer15, gamePlayer16 //game8
+                                                                )));
 
             List<Ship> shipList = new LinkedList<>();
-            shipList.addAll(new ArrayList<>(Arrays.asList(ship1, ship2, ship3, ship4, ship5))); //game 1
-            shipList.addAll(new ArrayList<>(Arrays.asList(ship6, ship7, ship8, ship9))); //game 2
-            shipList.addAll(new ArrayList<>(Arrays.asList(ship10, ship11, ship12, ship13))); //game 3
-            shipList.addAll(new ArrayList<>(Arrays.asList(ship14, ship15, ship16, ship17))); //game 4
-            shipList.addAll(new ArrayList<>(Arrays.asList(ship18, ship19, ship20, ship21))); //game 5
-//            shipList.addAll(new ArrayList<>(Arrays.asList(ship22, ship23))); //game 6
-            shipList.addAll(new ArrayList<>(Arrays.asList(ship24, ship25, ship26, ship27))); //game 8
+            shipList.addAll(new ArrayList<>(Arrays.asList(ship1, ship2, ship3, ship4, ship5, //game1
+                                            ship6, ship7, ship8, ship9, //game2
+                                            ship10, ship11, ship12, ship13, //game3
+                                            ship14, ship15, ship16, ship17, //game4
+                                            ship18, ship19, ship20, ship21, //game5
+//                                            ship22, ship23, //game6
+                                            ship24, ship25, ship26, ship27 //game8
+                                            )));
+
 
 
             List<Salvo> salvoList = new LinkedList<>();
-            //game 1
-            salvoList.addAll(new ArrayList<>(Arrays.asList(salvo_GamePlayer1_Turn1, salvo_GamePlayer1_Turn2, salvo_GamePlayer2_Turn1, salvo_GamePlayer2_Turn2)));
-
-            //game 2
-            salvoList.addAll(new ArrayList<>(Arrays.asList(salvo_GamePlayer3_Turn1, salvo_GamePlayer3_Turn2, salvo_GamePlayer4_Turn1, salvo_GamePlayer4_Turn2)));
-
-            //game 3
-            salvoList.addAll(new ArrayList<>(Arrays.asList(salvo_GamePlayer5_Turn1, salvo_GamePlayer5_Turn2, salvo_GamePlayer6_Turn1, salvo_GamePlayer6_Turn2)));
-
-            //game 4
-            salvoList.addAll(new ArrayList<>(Arrays.asList(salvo_GamePlayer7_Turn1, salvo_GamePlayer7_Turn2, salvo_GamePlayer8_Turn1, salvo_GamePlayer8_Turn2)));
-
-            //game 5
-            salvoList.addAll(new ArrayList<>(Arrays.asList(salvo_GamePlayer9_Turn1, salvo_GamePlayer9_Turn2, salvo_GamePlayer10_Turn1, salvo_GamePlayer10_Turn2, salvo_GamePlayer10_Turn3)));
+            salvoList.addAll(new ArrayList<>(Arrays.asList(salvo_GamePlayer1_Turn1, salvo_GamePlayer1_Turn2, salvo_GamePlayer2_Turn1, salvo_GamePlayer2_Turn2, //game1
+                                            salvo_GamePlayer3_Turn1, salvo_GamePlayer3_Turn2, salvo_GamePlayer4_Turn1, salvo_GamePlayer4_Turn2, //game2
+                                            salvo_GamePlayer5_Turn1, salvo_GamePlayer5_Turn2, salvo_GamePlayer6_Turn1, salvo_GamePlayer6_Turn2, //game3
+                                            salvo_GamePlayer7_Turn1, salvo_GamePlayer7_Turn2, salvo_GamePlayer8_Turn1, salvo_GamePlayer8_Turn2, //game4
+                                            salvo_GamePlayer9_Turn1, salvo_GamePlayer9_Turn2, salvo_GamePlayer10_Turn1, salvo_GamePlayer10_Turn2, salvo_GamePlayer10_Turn3 //game5
+                                            )));
 
 
             List<Score> scoreList = new LinkedList<>();

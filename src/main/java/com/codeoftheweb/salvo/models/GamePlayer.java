@@ -49,11 +49,10 @@ public class GamePlayer {
 
     //METODOS
 
-    @RequestMapping
-    public Map<String, Object> makeGamePlayerDTO() {
+    public Map<String, Object> makeGamePlayerDto() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
-        dto.put("player", this.getPlayer().makePlayerDTO());
+        dto.put("player", this.getPlayer().makePlayerDto());
 
         return dto;
     }

@@ -1,7 +1,6 @@
 package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import java.util.*;
@@ -37,23 +36,30 @@ public class Game {
 
     //METODOS
 
-    @RequestMapping
-    public Map<String, Object> makeGameDTO() {
+    public List<Map<String, Object>> getGamePlayersDto(){
+        return this.getGamePlayers()
+                .stream()
+                .map(gamePlayer -> gamePlayer.makeGamePlayerDto())
+                .collect(Collectors.toList())
+                ;
+    }
+
+    public List<Map<String, Object>> getScoresDto(){
+        return this.getGamePlayers()
+                .stream()
+                .map(gamePlayer -> gamePlayer.getScore())
+                .map(score -> score.makeScoreDto())
+                .collect(Collectors.toList())
+                ;
+    }
+
+
+    public Map<String, Object> makeGameDto() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("created", this.getCreationDate());
-
-        dto.put("gamePlayers", this.getGamePlayers()
-                .stream()
-                .map(gamePlayer -> gamePlayer.makeGamePlayerDTO())
-                .collect(Collectors.toList()));
-
-        dto.put("scores", this.getGamePlayers()
-                .stream()
-                .map(gamePlayer -> gamePlayer.getScore())
-                .map(score -> score.makeScoreDTO())
-                .collect(Collectors.toList())
-        );
+        dto.put("gamePlayers", this.getGamePlayersDto());
+        dto.put("scores", this.getScoresDto());
 
         return dto;
     }

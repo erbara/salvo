@@ -38,8 +38,7 @@ public class Salvo {
 
     //METODOS
 
-    @RequestMapping
-    public Map<String, Object> makeSalvoDTO() {
+    public Map<String, Object> makeSalvoDto() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", id);
         dto.put("turn", turn);

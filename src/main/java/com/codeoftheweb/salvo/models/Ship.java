@@ -47,8 +47,7 @@ public class Ship {
 
     //METODOS
 
-    @RequestMapping
-    public Map<String, Object> makeShipDTO() {
+    public Map<String, Object> makeShipDto() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("type", typeShip);
         dto.put("locations", locations);
