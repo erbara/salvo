@@ -2,11 +2,28 @@ package com.codeoftheweb.salvo;
 
 import com.codeoftheweb.salvo.models.*;
 import com.codeoftheweb.salvo.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.WebAttributes;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -18,6 +35,14 @@ public class SalvoApplication {
         SpringApplication.run(SalvoApplication.class);
     }
 
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+
+
     @Bean
     public CommandLineRunner initData(PlayerRepository playerRepository,
                                       GameRepository gameRepository,
@@ -28,11 +53,12 @@ public class SalvoApplication {
         return (args) -> {
 
             //Creacion de jugadores
-            Player player_jBauer = new Player("j.bauer@ctu.gov");
-            Player player_obrian = new Player("c.obrian@ctu.gov");
-            Player player_kBauer = new Player("kim_bauer@gmail.com");
-            Player player_almeida = new Player("t.almeida@ctu.gov");
-
+            Player player_jBauer = new Player("j.bauer@ctu.gov", passwordEncoder().encode("24"));
+            Player player_obrian = new Player("c.obrian@ctu.gov", passwordEncoder().encode("42"));
+            Player player_kBauer = new Player("kim_bauer@gmail.com", passwordEncoder().encode("kb"));
+            Player player_almeida = new Player("t.almeida@ctu.gov", passwordEncoder().encode("mole"));
+            Player erbara = new Player("erbara", passwordEncoder().encode("admin"));
+            Player admin = new Player("admin", passwordEncoder().encode("admin"));
             //creacion de juegos
             Game game1 = new Game();
             Game game2 = new Game();
@@ -70,7 +96,7 @@ public class SalvoApplication {
 
             //creacion de scores
             Score score1 = new Score(game1, player_jBauer);
-            Score score2 = new Score(game1, player_obrian); //
+            Score score2 = new Score(game1, player_obrian); //game1
 
             Score score3 = new Score(game2, player_jBauer);
             Score score4 = new Score(game2, player_obrian);//game2
@@ -195,41 +221,42 @@ public class SalvoApplication {
 
             //Creo listas para enviar toda la informacion en menos mensajes.
             List<Player> playerList = new LinkedList<>();
-            playerList.addAll(new ArrayList<>(Arrays.asList(player_jBauer, player_obrian, player_kBauer, player_almeida)));
+            playerList.addAll(new ArrayList<>(Arrays.asList(player_jBauer, player_obrian, player_kBauer, player_almeida,
+                    erbara, admin //mi usuario para pruebas de login
+            )));
 
             List<Game> gameList = new LinkedList<>();
             gameList.addAll(new ArrayList<>(Arrays.asList(game1, game2, game3, game4, game5, game6, game7, game8)));
 
             List<GamePlayer> gamePlayerList = new LinkedList<>();
             gamePlayerList.addAll(new ArrayList<>(Arrays.asList(gamePlayer1, gamePlayer2, //game1
-                                                                gamePlayer3, gamePlayer4, //game2
-                                                                gamePlayer5, gamePlayer6, //game3
-                                                                gamePlayer7, gamePlayer8, //game4
-                                                                gamePlayer9, gamePlayer10, //game5
+                    gamePlayer3, gamePlayer4, //game2
+                    gamePlayer5, gamePlayer6, //game3
+                    gamePlayer7, gamePlayer8, //game4
+                    gamePlayer9, gamePlayer10, //game5
 //                                                                gamePlayer11, gamePlayer12, //game6
 //                                                                gamePlayer13, gamePlayer14, //game7
-                                                                gamePlayer15, gamePlayer16 //game8
-                                                                )));
+                    gamePlayer15, gamePlayer16 //game8
+            )));
 
             List<Ship> shipList = new LinkedList<>();
             shipList.addAll(new ArrayList<>(Arrays.asList(ship1, ship2, ship3, ship4, ship5, //game1
-                                            ship6, ship7, ship8, ship9, //game2
-                                            ship10, ship11, ship12, ship13, //game3
-                                            ship14, ship15, ship16, ship17, //game4
-                                            ship18, ship19, ship20, ship21, //game5
+                    ship6, ship7, ship8, ship9, //game2
+                    ship10, ship11, ship12, ship13, //game3
+                    ship14, ship15, ship16, ship17, //game4
+                    ship18, ship19, ship20, ship21, //game5
 //                                            ship22, ship23, //game6
-                                            ship24, ship25, ship26, ship27 //game8
-                                            )));
-
+                    ship24, ship25, ship26, ship27 //game8
+            )));
 
 
             List<Salvo> salvoList = new LinkedList<>();
             salvoList.addAll(new ArrayList<>(Arrays.asList(salvo_GamePlayer1_Turn1, salvo_GamePlayer1_Turn2, salvo_GamePlayer2_Turn1, salvo_GamePlayer2_Turn2, //game1
-                                            salvo_GamePlayer3_Turn1, salvo_GamePlayer3_Turn2, salvo_GamePlayer4_Turn1, salvo_GamePlayer4_Turn2, //game2
-                                            salvo_GamePlayer5_Turn1, salvo_GamePlayer5_Turn2, salvo_GamePlayer6_Turn1, salvo_GamePlayer6_Turn2, //game3
-                                            salvo_GamePlayer7_Turn1, salvo_GamePlayer7_Turn2, salvo_GamePlayer8_Turn1, salvo_GamePlayer8_Turn2, //game4
-                                            salvo_GamePlayer9_Turn1, salvo_GamePlayer9_Turn2, salvo_GamePlayer10_Turn1, salvo_GamePlayer10_Turn2, salvo_GamePlayer10_Turn3 //game5
-                                            )));
+                    salvo_GamePlayer3_Turn1, salvo_GamePlayer3_Turn2, salvo_GamePlayer4_Turn1, salvo_GamePlayer4_Turn2, //game2
+                    salvo_GamePlayer5_Turn1, salvo_GamePlayer5_Turn2, salvo_GamePlayer6_Turn1, salvo_GamePlayer6_Turn2, //game3
+                    salvo_GamePlayer7_Turn1, salvo_GamePlayer7_Turn2, salvo_GamePlayer8_Turn1, salvo_GamePlayer8_Turn2, //game4
+                    salvo_GamePlayer9_Turn1, salvo_GamePlayer9_Turn2, salvo_GamePlayer10_Turn1, salvo_GamePlayer10_Turn2, salvo_GamePlayer10_Turn3 //game5
+            )));
 
 
             List<Score> scoreList = new LinkedList<>();
@@ -248,5 +275,129 @@ public class SalvoApplication {
         };
     }
 
+}
+@Configuration
+class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
+    @Autowired
+    PlayerRepository playerRepository;
+    @Override
+    public void init(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(inputName-> {
+            Player player = playerRepository.findByUserName(inputName);
+            if (player != null) {
+                return new User(player.getUserName(), player.getPassword(),
+                        AuthorityUtils.createAuthorityList("USER"));
+            } else {
+                throw new UsernameNotFoundException("Unknown user: " + inputName);
+            }
+        });
+    }
+}
+@Configuration
+@EnableWebSecurity
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/web/**").permitAll()
+                .antMatchers("/api/games").permitAll()
+                .antMatchers("/api/players","/api/login","/api/logout").permitAll()
+                .antMatchers("/rest").denyAll()
+                .antMatchers("/web/games.html").permitAll()
+                .antMatchers("/web/game.html?gp=*","/api/game_view/*").hasAuthority("USER")
+                .anyRequest().denyAll();
+//-------------------------------------------------------------------------------------------------------
+        http.formLogin()
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .loginPage("/api/login");
+        http.logout().logoutUrl("/api/logout");
+//--------------------------------------------------------------------------------------------------------
+        // turn off checking for CSRF tokens
+        http.csrf().disable();
+        // if user is not authenticated, just send an authentication failure response
+        http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+        // if login is successful, just clear the flags asking for authentication
+        http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
+        // if login fails, just send an authentication failure response
+        http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+        // if logout is successful, just send a success response
+        http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
+    }
+    private void clearAuthenticationAttributes(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        }
+    }
+}/*
+@Configuration //le dice a spring que la cree automaticamente
+class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
+
+    @Autowired
+    PlayerRepository playerRepository;
+
+    @Override
+    public void init(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userName -> {
+            Player player = playerRepository.findByUserName(userName);
+            if (player != null) { //si existe y lo encontro
+                return new User(player.getUserName(), player.getPassword(),
+                        AuthorityUtils.createAuthorityList("USER")); //este es el ROL.
+            } else {
+                throw new UsernameNotFoundException("Unknown user: " + userName);
+            }
+        });
+    }
 
 }
+
+@EnableWebSecurity
+@Configuration
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http.authorizeRequests()
+                .antMatchers("/rest").denyAll()
+                .antMatchers("/web/**").permitAll() //se refiere a los archivos **
+                .antMatchers("/api/games", "/api/players").permitAll()
+                .antMatchers("/api/game_view/**", "web/game.html?gp=*").hasAuthority("USER")
+                .antMatchers("/web/games.html").permitAll()
+                .anyRequest().denyAll();
+
+        http.formLogin()
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .loginPage("/api/login");
+
+        http.logout().logoutUrl("/api/logout");
+
+
+        // turn off checking for CSRF tokens
+        http.csrf().disable();
+
+        // if user is not authenticated, just send an authentication failure response
+        http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+
+        // if login is successful, just clear the flags asking for authentication
+        http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
+
+        // if login fails, just send an authentication failure response
+        http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+
+        // if logout is successful, just send a success response
+        http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
+
+    }
+
+
+    private void clearAuthenticationAttributes(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        }
+    }
+
+
+}*/

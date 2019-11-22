@@ -22,13 +22,20 @@ public class Player {
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private Set<Score> scores = new LinkedHashSet<>();
 
+    private String password;
+
     //CONSTRUCTORES
 
     public Player() {
-    } // constructor vacio necesario para la DB
+    }
 
-    public Player(String userName) {
+//    public Player(String userName) {
+//        this.userName = userName;
+//    }
+
+    public Player(String userName, String password) {
         this.userName = userName;
+        this.password = password;
     }
 
 
@@ -110,5 +117,19 @@ public class Player {
     public void setScore(Set<Score> scores) {
         this.scores = scores;
     }
+
+    public void setScores(Set<Score> scores) {
+        this.scores = scores;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
+    //no tiene sentido porque no vamos a hacer la opcion de cambiar la contrasena
+
 
 }

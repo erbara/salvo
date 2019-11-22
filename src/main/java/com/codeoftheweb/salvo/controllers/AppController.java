@@ -1,12 +1,17 @@
 package com.codeoftheweb.salvo.controllers;
 
+import com.codeoftheweb.salvo.models.Game;
 import com.codeoftheweb.salvo.models.GamePlayer;
+import com.codeoftheweb.salvo.models.Player;
 import com.codeoftheweb.salvo.repositories.*;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.Authenticator;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,7 +21,7 @@ import java.util.stream.Collectors;
 public class AppController {
 
     @Autowired
-    GameRepository gameRepository;
+ GameRepository gameRepository;
 
     @Autowired
     PlayerRepository playerRepository;
@@ -33,6 +38,9 @@ public class AppController {
     @Autowired
     ScoreRepository scoreRepository;
 
+
+
+
     @RequestMapping("/ships")
     public List<Object> getShipsAll() {
 
@@ -43,13 +51,32 @@ public class AppController {
     }
 
     @RequestMapping("/games") //nombre publico
-    public List<Object> getGamesAll() {
+    public List<Object> getGamesAll(Authentication authentication) {
+        Map <String, Object> dto = new LinkedHashMap<>();
+
+        if(isGuest(authentication)){
+            dto.put("player", "Guest");
+        }
+        else{
+            Player playerAutenticado = playerRepository.findByUserName((authentication.getName()));
+            dto.put("player", playerAutenticado.makePlayerDto()):
+        }
+        dto.put("games", gameRepository.findAll()
+            .stream()
+                .sorted(Comparator.comparingLong(Game::getId))
+                .
+        )
+
+
+
+
 
         return gameRepository.findAll()
                 .stream()
                 .map(game -> game.makeGameDto())
                 .collect(Collectors.toList())
                 ;
+
     }
 
     @RequestMapping("/players")
@@ -105,24 +132,24 @@ public class AppController {
         return dto;
     }
 
+// NO BORRAR, ESTO LO VAMOS A VER DESPUES
+   /* @RequestMapping(path = "/persons", method = RequestMethod.POST)
+    public ResponseEntity<Object> register(
+//            @RequestParam first, @RequestParam last,
+            @RequestParam String userName, @RequestParam String password) {
 
-    //SETTERS y GETTERS
+        if( *//*(firstName.isEmpty() || last.isEmpty() ||*//* userName.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
 
-    public GameRepository getGameRepository() {
-        return gameRepository;
-    }
+        if (playerRepository.findByUserName(userName) !=  null) {
+            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+        }
 
-    public void setGameRepository(GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
-    }
+        playerRepository.save(new Player(*//*first, last,*//* userName, passwordEncoder.encode(password)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }*/
 
-    public PlayerRepository getPlayerRepository() {
-        return playerRepository;
-    }
-
-    public void setPlayerRepository(PlayerRepository playerRepository) {
-        this.playerRepository = playerRepository;
-    }
 
 
 }
