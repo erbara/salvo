@@ -99,12 +99,8 @@ public class AppController {
         dto.put("salvoes", gamePlayer.getGame().getGamePlayers()
                 .stream()
                 .flatMap(_gamePlayer -> _gamePlayer.getSalvoes().stream().map(_salvo -> _salvo.makeSalvoDto()))
-                //.flatMap(_gamePlayer -> _gamePlayer.getSalvoes().stream().map(_salvo -> _salvo.makeSalvoDTO()))
                 .collect(Collectors.toList())
         );
-
-        // todo       dto.put("salvoes", gamePlayer.getGame().getAllSalvoes());
-        //para que quede mejor
 
         return dto;
     }
