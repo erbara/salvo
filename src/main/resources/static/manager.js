@@ -50,4 +50,6 @@ $(function() {
   $("#add_player").on("click", addPlayer);
 
   loadData();
+
+
 });

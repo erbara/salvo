@@ -57,7 +57,6 @@ public class GamePlayer {
         return dto;
     }
 
-
     //SETTERS y GETTERS
 
     public Player getPlayer() {

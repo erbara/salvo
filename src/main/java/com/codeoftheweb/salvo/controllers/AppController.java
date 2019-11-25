@@ -4,10 +4,12 @@ import com.codeoftheweb.salvo.models.Game;
 import com.codeoftheweb.salvo.models.GamePlayer;
 import com.codeoftheweb.salvo.models.Player;
 import com.codeoftheweb.salvo.repositories.*;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +40,8 @@ public class AppController {
     @Autowired
     ScoreRepository scoreRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
 
@@ -50,34 +54,72 @@ public class AppController {
                 .collect(Collectors.toList());
     }
 
+
+
+
     @RequestMapping("/games") //nombre publico
-    public List<Object> getGamesAll(Authentication authentication) {
+    public Map<String, Object> getGamesAll(Authentication authentication) {
         Map <String, Object> dto = new LinkedHashMap<>();
 
         if(isGuest(authentication)){
             dto.put("player", "Guest");
         }
         else{
-            Player playerAutenticado = playerRepository.findByUserName((authentication.getName()));
-            dto.put("player", playerAutenticado.makePlayerDto()):
+            Player playerAutenticado = playerRepository.findByUsername((authentication.getName()));
+            dto.put("player", playerAutenticado.makePlayerDto());
         }
-        dto.put("games", gameRepository.findAll()
-            .stream()
-                .sorted(Comparator.comparingLong(Game::getId))
-                .
-        )
 
-
-
-
-
-        return gameRepository.findAll()
+        dto.put("games",gameRepository.findAll()
                 .stream()
                 .map(game -> game.makeGameDto())
-                .collect(Collectors.toList())
-                ;
+                .collect(Collectors.toList()))
+        ;   /*en la consigna dice que devolvemos lo mismo que devolviamos antes
+            por eso no lo filtre segun los games en los que esta el player*/
+
+        return dto;
+    }
+
+
+     @RequestMapping(path = "/players", method = RequestMethod.POST)
+       public ResponseEntity<Object> register(@RequestParam String username, @RequestParam String password) {
+
+           if( (username.isEmpty() || password.isEmpty())) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+
+        if (playerRepository.findByUsername(username) !=  null) {
+            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+        }
+
+        playerRepository.save(new Player( username, passwordEncoder.encode(password)));
+        return new ResponseEntity<>(HttpStatus.CREATED); //este es el codigo 201
+    }
+
+    private boolean isGuest(Authentication authentication) {
+        return authentication == null || authentication instanceof AnonymousAuthenticationToken;
+    }
+
+
+    /*@RequestMapping(path = "/users", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> createUser(@RequestParam String username, @RequestParam String password) {
+        if (username.isEmpty()) {
+            return new ResponseEntity<>(makeMap("error", "No name"), HttpStatus.FORBIDDEN);
+        }
+        Player player = playerRepository.findByUsername(username);
+        if (player != null) {
+            return new ResponseEntity<>(makeMap("error", "Name in use"), HttpStatus.CONFLICT);
+        }
+        Player newPlayer = playerRepository.save(new Player(username, password));
+        return new ResponseEntity<>(makeMap("id", newPlayer.getId()), HttpStatus.CREATED);
 
     }
+
+    private Map<String, Object> makeMap(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
+    }  */
+
 
     @RequestMapping("/players")
     public List<Object> getPlayersAll() {
@@ -131,6 +173,8 @@ public class AppController {
 
         return dto;
     }
+
+
 
 // NO BORRAR, ESTO LO VAMOS A VER DESPUES
    /* @RequestMapping(path = "/persons", method = RequestMethod.POST)

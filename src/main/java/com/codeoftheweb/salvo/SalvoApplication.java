@@ -133,45 +133,45 @@ public class SalvoApplication {
             //creacion ships
 
             //ships game 1
-            Ship ship1 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer1, new ArrayList<String>(Arrays.asList("H2", "H3", "H4")));
-            Ship ship2 = new Ship(Ship.TypeShip.SUBMARINE, gamePlayer1, new ArrayList<String>(Arrays.asList("E1", "F1", "G1")));
-            Ship ship3 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer1, new ArrayList<String>(Arrays.asList("B4", "B5")));
-            Ship ship4 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer2, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
-            Ship ship5 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer2, new ArrayList<String>(Arrays.asList("F1", "F2")));
+            Ship ship1 = new Ship("DESTROYER", gamePlayer1, new ArrayList<String>(Arrays.asList("H2", "H3", "H4")));
+            Ship ship2 = new Ship("SUBMARINE", gamePlayer1, new ArrayList<String>(Arrays.asList("E1", "F1", "G1")));
+            Ship ship3 = new Ship("PATROLBOAT", gamePlayer1, new ArrayList<String>(Arrays.asList("B4", "B5")));
+            Ship ship4 = new Ship("DESTROYER", gamePlayer2, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
+            Ship ship5 = new Ship("PATROLBOAT", gamePlayer2, new ArrayList<String>(Arrays.asList("F1", "F2")));
 
             //ships game 2
-            Ship ship6 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer3, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
-            Ship ship7 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer3, new ArrayList<String>(Arrays.asList("C6", "C7")));
-            Ship ship8 = new Ship(Ship.TypeShip.SUBMARINE, gamePlayer4, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
-            Ship ship9 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer4, new ArrayList<String>(Arrays.asList("G6", "H6")));
+            Ship ship6 = new Ship("DESTROYER", gamePlayer3, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
+            Ship ship7 = new Ship("PATROLBOAT", gamePlayer3, new ArrayList<String>(Arrays.asList("C6", "C7")));
+            Ship ship8 = new Ship("SUBMARINE", gamePlayer4, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
+            Ship ship9 = new Ship("PATROLBOAT", gamePlayer4, new ArrayList<String>(Arrays.asList("G6", "H6")));
 
             //ships game 3
-            Ship ship10 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer5, new ArrayList<>(Arrays.asList("B5", "C5", "D5")));
-            Ship ship11 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer5, new ArrayList<String>(Arrays.asList("C6", "C7")));
-            Ship ship12 = new Ship(Ship.TypeShip.SUBMARINE, gamePlayer6, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
-            Ship ship13 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer6, new ArrayList<String>(Arrays.asList("G6", "H6")));
+            Ship ship10 = new Ship("DESTROYER", gamePlayer5, new ArrayList<>(Arrays.asList("B5", "C5", "D5")));
+            Ship ship11 = new Ship("PATROLBOAT", gamePlayer5, new ArrayList<String>(Arrays.asList("C6", "C7")));
+            Ship ship12 = new Ship("SUBMARINE", gamePlayer6, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
+            Ship ship13 = new Ship("PATROLBOAT", gamePlayer6, new ArrayList<String>(Arrays.asList("G6", "H6")));
 
             //ships game 4
-            Ship ship14 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer7, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
-            Ship ship15 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer7, new ArrayList<String>(Arrays.asList("C6", "C7")));
-            Ship ship16 = new Ship(Ship.TypeShip.SUBMARINE, gamePlayer8, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
-            Ship ship17 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer8, new ArrayList<String>(Arrays.asList("G6", "H6")));
+            Ship ship14 = new Ship("DESTROYER", gamePlayer7, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
+            Ship ship15 = new Ship("PATROLBOAT", gamePlayer7, new ArrayList<String>(Arrays.asList("C6", "C7")));
+            Ship ship16 = new Ship("SUBMARINE", gamePlayer8, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
+            Ship ship17 = new Ship("PATROLBOAT", gamePlayer8, new ArrayList<String>(Arrays.asList("G6", "H6")));
 
             //ships game 5
-            Ship ship18 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer9, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
-            Ship ship19 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer9, new ArrayList<String>(Arrays.asList("C6", "C7")));
-            Ship ship20 = new Ship(Ship.TypeShip.SUBMARINE, gamePlayer10, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
-            Ship ship21 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer10, new ArrayList<String>(Arrays.asList("G6", "H6")));
+            Ship ship18 = new Ship("DESTROYER", gamePlayer9, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
+            Ship ship19 = new Ship("PATROLBOAT", gamePlayer9, new ArrayList<String>(Arrays.asList("C6", "C7")));
+            Ship ship20 = new Ship("SUBMARINE", gamePlayer10, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
+            Ship ship21 = new Ship("PATROLBOAT", gamePlayer10, new ArrayList<String>(Arrays.asList("G6", "H6")));
 
             //ships game 6
-//            Ship ship22 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer11, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
-//            Ship ship23 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer11, new ArrayList<String>(Arrays.asList("C6", "C7")));
+//            Ship ship22 = new Ship("DESTROYER", gamePlayer11, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
+//            Ship ship23 = new Ship("PATROLBOAT", gamePlayer11, new ArrayList<String>(Arrays.asList("C6", "C7")));
 
             //ships game 8
-            Ship ship24 = new Ship(Ship.TypeShip.DESTROYER, gamePlayer15, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
-            Ship ship25 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer15, new ArrayList<String>(Arrays.asList("C6", "C7")));
-            Ship ship26 = new Ship(Ship.TypeShip.SUBMARINE, gamePlayer16, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
-            Ship ship27 = new Ship(Ship.TypeShip.PATROLBOAT, gamePlayer16, new ArrayList<String>(Arrays.asList("G6", "H6")));
+            Ship ship24 = new Ship("DESTROYER", gamePlayer15, new ArrayList<String>(Arrays.asList("B5", "C5", "D5")));
+            Ship ship25 = new Ship("PATROLBOAT", gamePlayer15, new ArrayList<String>(Arrays.asList("C6", "C7")));
+            Ship ship26 = new Ship("SUBMARINE", gamePlayer16, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
+            Ship ship27 = new Ship("PATROLBOAT", gamePlayer16, new ArrayList<String>(Arrays.asList("G6", "H6")));
 
 
             //creacion de salvoes
@@ -276,6 +276,8 @@ public class SalvoApplication {
     }
 
 }
+
+
 @Configuration
 class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
     @Autowired
@@ -283,9 +285,9 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(inputName-> {
-            Player player = playerRepository.findByUserName(inputName);
+            Player player = playerRepository.findByUsername(inputName);
             if (player != null) {
-                return new User(player.getUserName(), player.getPassword(),
+                return new User(player.getUsername(), player.getPassword(),
                         AuthorityUtils.createAuthorityList("USER"));
             } else {
                 throw new UsernameNotFoundException("Unknown user: " + inputName);
@@ -293,6 +295,10 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
         });
     }
 }
+
+
+
+
 @Configuration
 @EnableWebSecurity
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -304,12 +310,15 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/players","/api/login","/api/logout").permitAll()
                 .antMatchers("/rest").denyAll()
                 .antMatchers("/web/games.html").permitAll()
+                .antMatchers("/api/users").permitAll()
                 .antMatchers("/web/game.html?gp=*","/api/game_view/*").hasAuthority("USER")
-                .anyRequest().denyAll();
+                .anyRequest().denyAll()
+//                .antMatchers("/*").permitAll()
+                ;
 //-------------------------------------------------------------------------------------------------------
         http.formLogin()
-                .usernameParameter("email")
-                .passwordParameter("password")
+                .usernameParameter("name")
+                .passwordParameter("pwd")
                 .loginPage("/api/login");
         http.logout().logoutUrl("/api/logout");
 //--------------------------------------------------------------------------------------------------------
@@ -330,7 +339,12 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
         }
     }
-}/*
+}
+
+
+
+
+/*
 @Configuration //le dice a spring que la cree automaticamente
 class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 

@@ -12,17 +12,13 @@ import java.util.Map;
 @Entity
 public class Ship {
 
-    public enum TypeShip {CARRIER, BATTLESHIP, SUBMARINE, DESTROYER, PATROLBOAT}
-
-    ;
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
-    private TypeShip typeShip;
+    private String typeShip;
 
     @ElementCollection
     @Column(name = "shipLocations")
@@ -38,7 +34,7 @@ public class Ship {
     public Ship() {
     }
 
-    public Ship(TypeShip typeShip, GamePlayer gamePlayer, List shipLocation) {
+    public Ship(String typeShip, GamePlayer gamePlayer, List shipLocation) {
         this.typeShip = typeShip;
         this.gamePlayer = gamePlayer;
         this.locations = shipLocation;
@@ -61,11 +57,11 @@ public class Ship {
         return id;
     }
 
-    public TypeShip getTypeShip() {
+    public String getTypeShip() {
         return typeShip;
     }
 
-    public void setTypeShip(TypeShip typeShip) {
+    public void setTypeShip(String typeShip) {
         this.typeShip = typeShip;
     }
 

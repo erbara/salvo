@@ -1,7 +1,6 @@
 package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,7 +13,7 @@ public class Player {
     @GenericGenerator(name = "native", strategy = "native")
     private long id; // va a ser la primary key.
 
-    private String userName;
+    private String username;
 
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private Set<GamePlayer> gamePlayers = new LinkedHashSet<>();
@@ -29,12 +28,12 @@ public class Player {
     public Player() {
     }
 
-//    public Player(String userName) {
-//        this.userName = userName;
-//    }
+    public Player(String username) {
+        this.username = username;
+    }
 
-    public Player(String userName, String password) {
-        this.userName = userName;
+    public Player(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
@@ -82,7 +81,7 @@ public class Player {
     public Map<String, Object> makePlayerDto() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
-        dto.put("email", this.getUserName());
+        dto.put("email", this.getUsername());
 
         return dto;
     }
@@ -102,12 +101,12 @@ public class Player {
         return id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Set<Score> getScores() {
