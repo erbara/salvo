@@ -125,10 +125,5 @@ public class Player {
         return password;
     }
 
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
-    //no tiene sentido porque no vamos a hacer la opcion de cambiar la contrasena
-
 
 }
