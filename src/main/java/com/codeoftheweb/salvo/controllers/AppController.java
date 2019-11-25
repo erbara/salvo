@@ -3,11 +3,13 @@ package com.codeoftheweb.salvo.controllers;
 import com.codeoftheweb.salvo.models.Game;
 import com.codeoftheweb.salvo.models.GamePlayer;
 import com.codeoftheweb.salvo.models.Player;
+import com.codeoftheweb.salvo.models.Util;
 import com.codeoftheweb.salvo.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.Authenticator;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import javax.persistence.*;
+//import java.util.*;
 
 //t0do lo que nos devuelve el controller es un JSON
 @RestController //hace la serelisacion de nuestros metodos.
@@ -99,28 +104,6 @@ public class AppController {
         return authentication == null || authentication instanceof AnonymousAuthenticationToken;
     }
 
-
-    /*@RequestMapping(path = "/users", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> createUser(@RequestParam String username, @RequestParam String password) {
-        if (username.isEmpty()) {
-            return new ResponseEntity<>(makeMap("error", "No name"), HttpStatus.FORBIDDEN);
-        }
-        Player player = playerRepository.findByUsername(username);
-        if (player != null) {
-            return new ResponseEntity<>(makeMap("error", "Name in use"), HttpStatus.CONFLICT);
-        }
-        Player newPlayer = playerRepository.save(new Player(username, password));
-        return new ResponseEntity<>(makeMap("id", newPlayer.getId()), HttpStatus.CREATED);
-
-    }
-
-    private Map<String, Object> makeMap(String key, Object value) {
-        Map<String, Object> map = new HashMap<>();
-        map.put(key, value);
-        return map;
-    }  */
-
-
     @RequestMapping("/players")
     public List<Object> getPlayersAll() {
         return playerRepository.findAll()
@@ -129,7 +112,6 @@ public class AppController {
                 .collect(Collectors.toList())
                 ;
     }
-
 
     @RequestMapping("/leaderboard")
     public List<Object> showLeaderBoard() {
@@ -143,13 +125,37 @@ public class AppController {
 
     }
 
+    @RequestMapping(path = "/game/{gameId}/players")
 
     @RequestMapping("/game_view/{nn}")
-    public Map<String, Object> getGamePlayerInformation(@PathVariable("nn") Long gamePlayerID) {
+    public ResponseEntity<Map<String, Object>> getGamePlayerInformation(@PathVariable("nn") Long gamePlayerID, Authentication authentication) {
 
-        GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerID).get();
+
+//        if(Util.isGuest(authentication)){
+//            return new ResponseEntity<>(Util.makeMap("error", "Player sin Loguear, no puede ver info"), HttpStatus.FORBIDDEN);
+//        }
+//
+//        Player playerAutentificado = playerRepository.findByUsername(authentication.getName());
+//        if (playerAutentificado != null )
+////        Player playerAutentificado = playerRepository.findByUsername(authentication.getName()).orElse(null);
+////                .orElse(null);
+//
+//            //todo no me funciona de la misma forma y NO SE PORQUE
+//
+//
+//        GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerID).orElse(null);
 
         Map<String, Object> dto = new LinkedHashMap<>();
+
+        if(playerAutentificado == null){
+            return new ResponseEntity<>(Util.makeMap("error", "Player sin autorizacion para ver partida"), HttpStatus.UNAUTHORIZED);
+        }
+        if(gamePlayer == null){
+            return new ResponseEntity<>(Util.makeMap("error", "GamePlayer no valido"), HttpStatus.UNAUTHORIZED);
+        }
+        if(gamePlayer.getPlayer().getId() != playerAutentificado.getId()){
+            return new ResponseEntity<>(Util.makeMap("error", "GamePlayer no deberia ver esto"), HttpStatus.UNAUTHORIZED);
+        }
 
         dto.put("id", gamePlayer.getId());
         dto.put("created", gamePlayer.getGame().getCreationDate());
@@ -171,28 +177,9 @@ public class AppController {
                 .collect(Collectors.toList())
         );
 
-        return dto;
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-
-
-// NO BORRAR, ESTO LO VAMOS A VER DESPUES
-   /* @RequestMapping(path = "/persons", method = RequestMethod.POST)
-    public ResponseEntity<Object> register(
-//            @RequestParam first, @RequestParam last,
-            @RequestParam String userName, @RequestParam String password) {
-
-        if( *//*(firstName.isEmpty() || last.isEmpty() ||*//* userName.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
-        }
-
-        if (playerRepository.findByUserName(userName) !=  null) {
-            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
-        }
-
-        playerRepository.save(new Player(*//*first, last,*//* userName, passwordEncoder.encode(password)));
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }*/
 
 
 
