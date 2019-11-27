@@ -188,20 +188,59 @@ public class GameController {
         if (!gamePlayer.getShips().isEmpty()) {
             return new ResponseEntity<>(Util.makeMap("error", "El jugador ya tiene barcos colocados"), HttpStatus.FORBIDDEN);
         }
-        //Set<Ship> shipsSet = new HashSet<Ship>(ships.stream().map(_ship -> _ship.setGamePlayer(gamePlayer)).collect(Collectors.toList()));
         ships.stream().forEach(ship -> ship.setGamePlayer(gamePlayer));
-//        ships = ships.stream().map(_ship -> _ship.setGamePlayer(gamePlayer)).collect(Collectors.toList());
-//        gamePlayer.setShips((Set<Ship>) ships);
-//        gamePlayerRepository.save(gamePlayer);
 
         shipRepository.saveAll(ships);
-
-//        gamePlayer.setShips((Set<Ship>) ships);
-//        gamePlayerRepository.save(gamePlayer);
 
         return new ResponseEntity<>(Util.makeMap("ok", "barcos asignados"), HttpStatus.OK);
 
     }
+
+    @RequestMapping("/games/players/{gamePlayerId}/salvos")
+    public ResponseEntity<Map<String, Object>> getSalvoesFromGamePlayer(@PathVariable("gamePlayerId") Long gamePlayerID,
+                                                                      @RequestBody Salvo salvo,
+                                                                      Authentication authentication) {
+        if (Util.isGuest(authentication)) {
+            return new ResponseEntity<>(Util.makeMap("error", "Player sin Loguear, no puede ver info"), HttpStatus.FORBIDDEN);
+        }
+
+        Player playerAutentificado = playerRepository.findByUsername(authentication.getName()).orElse(null);
+        GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerID).get();
+
+
+        if (playerAutentificado == null) {
+            return new ResponseEntity<>(Util.makeMap("error", "Player sin autorizacion para ver partida"), HttpStatus.UNAUTHORIZED);
+        }
+        if (gamePlayer == null) {
+            return new ResponseEntity<>(Util.makeMap("error", "GamePlayer no valido"), HttpStatus.UNAUTHORIZED);
+        }
+        if (gamePlayer.getPlayer().getId() != playerAutentificado.getId()) {
+            return new ResponseEntity<>(Util.makeMap("error", "GamePlayer no deberia ver esto"), HttpStatus.UNAUTHORIZED);
+        }
+
+
+//        if (!gamePlayer.getShips().isEmpty()) {
+//            return new ResponseEntity<>(Util.makeMap("error", "El jugador ya tiene barcos colocados"), HttpStatus.FORBIDDEN);
+//        }
+//        ships.stream().forEach(ship -> ship.setGamePlayer(gamePlayer));
+//        shipRepository.saveAll(ships);
+
+
+        if( gamePlayer.getSalvoes().stream().filter(salvo1 -> salvo1.getTurn() == salvo.getTurn()).count() > 0 ){
+            return new ResponseEntity<>(Util.makeMap("error", "El jugador ya asigno salvos a ese turno"), HttpStatus.FORBIDDEN);
+        }
+
+        return new ResponseEntity<>(Util.makeMap("ok", "salvos asignados"), HttpStatus.OK);
+
+    }
+
+
+
+
+
+
+
+
 
     public String getState(GamePlayer gamePlayerSelf, GamePlayer gamePlayerOpponent){
 
