@@ -234,8 +234,8 @@ public class SalvoApplication {
                     gamePlayer5, gamePlayer6, //game3
                     gamePlayer7, gamePlayer8, //game4
                     gamePlayer9, gamePlayer10, //game5
-//                                                                gamePlayer11, gamePlayer12, //game6
-//                                                                gamePlayer13, gamePlayer14, //game7
+//                    gamePlayer11, gamePlayer12, //game6
+//                    gamePlayer13, gamePlayer14, //game7
                     gamePlayer15, gamePlayer16 //game8
             )));
 
@@ -245,7 +245,7 @@ public class SalvoApplication {
                     ship10, ship11, ship12, ship13, //game3
                     ship14, ship15, ship16, ship17, //game4
                     ship18, ship19, ship20, ship21, //game5
-//                                            ship22, ship23, //game6
+//                    ship22, ship23, //game6
                     ship24, ship25, ship26, ship27 //game8
             )));
 
@@ -285,7 +285,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(inputName-> {
-            Player player = playerRepository.findByUsername(inputName);
+            Player player = playerRepository.findByUsername(inputName).orElse(null);
             if (player != null) {
                 return new User(player.getUsername(), player.getPassword(),
                         AuthorityUtils.createAuthorityList("USER"));

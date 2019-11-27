@@ -14,6 +14,7 @@ public class Game {
     @GenericGenerator(name = "native", strategy = "native")
     private long id; // va a ser la primary key.
     private Date creationDate;
+    private String gameState = "PLACESHIPS";
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<GamePlayer> gamePlayers = new LinkedHashSet<>();
@@ -27,7 +28,6 @@ public class Game {
     public Game() {  //constructor vacio necesario para la DB
         this.creationDate = new Date();
     }
-
 
     public Game(Date creationDate) {
         this.creationDate = creationDate;
@@ -58,6 +58,7 @@ public class Game {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("created", this.getCreationDate());
+        dto.put("gameState", this.getGameState());
         dto.put("gamePlayers", this.getGamePlayersDto());
         dto.put("scores", this.getScoresDto());
 
@@ -94,4 +95,13 @@ public class Game {
     public void setScore(Set<Score> score) {
         this.score = score;
     }
+
+    public String getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(String gameState) {
+        this.gameState = gameState;
+    }
+
 }
