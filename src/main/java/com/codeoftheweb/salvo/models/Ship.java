@@ -1,7 +1,6 @@
 package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,11 +17,12 @@ public class Ship {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
-    private String typeShip;
+    private String type;
 
     @ElementCollection
     @Column(name = "shipLocations")
-    private List<String> locations = new ArrayList<>();
+//    @Column(name = "locations")
+    private List<String> shipLocations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gamePlayer_id")
@@ -34,10 +34,10 @@ public class Ship {
     public Ship() {
     }
 
-    public Ship(String typeShip, GamePlayer gamePlayer, List shipLocation) {
-        this.typeShip = typeShip;
+    public Ship(String type, GamePlayer gamePlayer, List shipLocation) {
+        this.type = type;
         this.gamePlayer = gamePlayer;
-        this.locations = shipLocation;
+        this.shipLocations = shipLocation;
 
     }
 
@@ -45,8 +45,8 @@ public class Ship {
 
     public Map<String, Object> makeShipDto() {
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("type", typeShip);
-        dto.put("locations", locations);
+        dto.put("type", type);
+        dto.put("locations", shipLocations);
         return dto;
     }
 
@@ -57,16 +57,16 @@ public class Ship {
         return id;
     }
 
-    public String getTypeShip() {
-        return typeShip;
+    public String getType() {
+        return type;
     }
 
-    public void setTypeShip(String typeShip) {
-        this.typeShip = typeShip;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public List getLocations() {
-        return locations;
+    public List getShipLocations() {
+        return shipLocations;
     }
 
     public GamePlayer getGamePlayer() {
@@ -77,8 +77,8 @@ public class Ship {
         this.gamePlayer = gamePlayer;
     }
 
-    public void setLocations(List<String> locations) {
-        this.locations = locations;
+    public void setShipLocations(List<String> shipLocations) {
+        this.shipLocations = shipLocations;
     }
 
 

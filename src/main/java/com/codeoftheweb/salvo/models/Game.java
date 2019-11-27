@@ -12,9 +12,9 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private long id; // va a ser la primary key.
+    private long id;
     private Date creationDate;
-    private String gameState = "PLACESHIPS";
+    private String gameState;
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<GamePlayer> gamePlayers = new LinkedHashSet<>();
