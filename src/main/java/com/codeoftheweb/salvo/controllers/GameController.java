@@ -119,15 +119,7 @@ public class GameController {
         }
 
         Player playerAutentificado = playerRepository.findByUsername(authentication.getName()).orElse(null);
-        if (playerAutentificado == null ){
-            return new ResponseEntity<>(Util.makeMap("error", "error en el player"), HttpStatus.FORBIDDEN);
-        }
-
         GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerID).get();
-        if( gamePlayerID == null){
-            return new ResponseEntity<>(Util.makeMap("error", "gamePlayer inexistente"), HttpStatus.FORBIDDEN);
-        }
-
 
         if(playerAutentificado == null){
             return new ResponseEntity<>(Util.makeMap("error", "Player sin autorizacion para ver partida"), HttpStatus.UNAUTHORIZED);
