@@ -188,16 +188,10 @@ public class GameController {
         if (!gamePlayer.getShips().isEmpty()) {
             return new ResponseEntity<>(Util.makeMap("error", "El jugador ya tiene barcos colocados"), HttpStatus.FORBIDDEN);
         }
-        //Set<Ship> shipsSet = new HashSet<Ship>(ships.stream().map(_ship -> _ship.setGamePlayer(gamePlayer)).collect(Collectors.toList()));
+
         ships.stream().forEach(ship -> ship.setGamePlayer(gamePlayer));
-//        ships = ships.stream().map(_ship -> _ship.setGamePlayer(gamePlayer)).collect(Collectors.toList());
-//        gamePlayer.setShips((Set<Ship>) ships);
-//        gamePlayerRepository.save(gamePlayer);
 
         shipRepository.saveAll(ships);
-
-//        gamePlayer.setShips((Set<Ship>) ships);
-//        gamePlayerRepository.save(gamePlayer);
 
         return new ResponseEntity<>(Util.makeMap("ok", "barcos asignados"), HttpStatus.OK);
 
@@ -217,9 +211,7 @@ public class GameController {
         if(gamePlayerSelf.getId()>gamePlayerOpponent.getId()){//el segundo en entrar a la partida tiene que esperar
             return "WAIT";
         }
-//        if(){
-//            return
-//        }
+        
         return "LOST";
     }
 
