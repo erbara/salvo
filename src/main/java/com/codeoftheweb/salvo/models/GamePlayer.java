@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo.models;
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -53,19 +54,22 @@ public class GamePlayer {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("player", this.getPlayer().makePlayerDto());
+        dto.put("joinDate", this.getJoinDate()); //esto faltaba
 
         return dto;
     }
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public GamePlayer getOpponent(){
+
         return this.getGame().getGamePlayers().stream()
                 .filter(gamePlayer->gamePlayer.getId() != this.getId())
                 .findFirst()
-                .orElse(new GamePlayer());
+                .orElse(new GamePlayer())
+                ;
     }
 
     //SETTERS y GETTERS
-
     public Player getPlayer() {
         return player;
     }

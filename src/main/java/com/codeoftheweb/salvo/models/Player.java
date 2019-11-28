@@ -49,33 +49,33 @@ public class Player {
     }
 
 
-    public HashMap<String, Object> showAllScores() {
-
-        HashMap<String, Object> dto = new LinkedHashMap<>();
-
-        dto.put("player", this.makePlayerDto());
-        dto.put("totalScores", scores.stream()
-                .map(_score -> _score.getScore())
-                .reduce((double) 0, Double::sum)
-        );
-        dto.put("totalWins", scores.stream()
-                .map(_score -> _score.getScore())
-                .filter(_score -> _score == 1)
-                .reduce((double) 0, Double::sum)
-        );
-        dto.put("totalLosses", scores.stream()
-                .map(_score -> _score.getScore())
-                .filter(_score -> _score == 0)
-                .reduce((double) 0, Double::sum)
-        );
-        dto.put("totalTies", scores.stream()
-                .map(_score -> _score.getScore())
-                .filter(_score -> _score == 0.5)
-                .reduce((double) 0, Double::sum)
-        );
-
-        return dto;
-    }
+//    public HashMap<String, Object> showAllScores() {
+//
+//        HashMap<String, Object> dto = new LinkedHashMap<>();
+//
+//        dto.put("player", this.makePlayerDto());
+//        dto.put("totalScores", scores.stream()
+//                .map(_score -> _score.getScore())
+//                .reduce((double) 0, Double::sum)
+//        );
+//        dto.put("totalWins", scores.stream()
+//                .map(_score -> _score.getScore())
+//                .filter(_score -> _score == 1)
+//                .reduce((double) 0, Double::sum)
+//        );
+//        dto.put("totalLosses", scores.stream()
+//                .map(_score -> _score.getScore())
+//                .filter(_score -> _score == 0)
+//                .reduce((double) 0, Double::sum)
+//        );
+//        dto.put("totalTies", scores.stream()
+//                .map(_score -> _score.getScore())
+//                .filter(_score -> _score == 0.5)
+//                .reduce((double) 0, Double::sum)
+//        );
+//
+//        return dto;
+//    }
 
 
     public Map<String, Object> makePlayerDto() {

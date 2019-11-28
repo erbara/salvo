@@ -16,16 +16,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import static com.codeoftheweb.salvo.models.Util.*;
 
-
 import java.net.Authenticator;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.persistence.*;
-//import java.util.*;
 
-//t0do lo que nos devuelve el controller es un JSON
-@RestController //hace la serelisacion de nuestros metodos.
+@RestController
 @RequestMapping("/api")
 public class AppController {
 
@@ -62,20 +59,19 @@ public class AppController {
     }
 
 
-
-    @RequestMapping("/leaderboard")
-    public List<Object> showLeaderBoard() {
-
-        return playerRepository.findAll()
-                .stream()
-                .map(player -> player.showAllScores())
-                .collect(Collectors.toList())
-                ;
-
-
-    }
-
-
-
+//
+//    @RequestMapping("/leaderboard")
+//    public List<Object> showLeaderBoard() {
+//
+//        return playerRepository.findAll()
+//                .stream()
+//                .map(player -> player.showAllScores())
+//                .collect(Collectors.toList())
+//                ;
+//
+//
+//    }
+//
+//
 
 }

@@ -37,6 +37,9 @@ public class GameController {
     @Autowired
     private ShipRepository shipRepository;
 
+    @Autowired
+    private SalvoRepository salvoRepository;
+
     @RequestMapping("/games") //nombre publico
     public Map<String, Object> getGamesAll(Authentication authentication) {
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -51,8 +54,8 @@ public class GameController {
         dto.put("games", gameRepository.findAll()
                 .stream()
                 .map(game -> game.makeGameDto())
-                .collect(Collectors.toList()))
-        ;
+                .collect(Collectors.toList())
+            );
 
         return dto;
     }
@@ -80,7 +83,7 @@ public class GameController {
     }
 
     @RequestMapping(path = "/game/{gameId}/players", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> showPlayerInfoInGame(@PathVariable("gameId") Long gameId, Authentication authentication) {
+    public ResponseEntity<Map<String, Object>> joinGame(@PathVariable/*("gameId")*/ Long gameId, Authentication authentication) {
 
         if (isGuest(authentication)) {
             return new ResponseEntity<>(Util.makeMap("error", "Usuario no logueado"), HttpStatus.UNAUTHORIZED);
@@ -98,19 +101,22 @@ public class GameController {
             return new ResponseEntity<>(Util.makeMap("error", "No such game"), HttpStatus.FORBIDDEN);
         }
 
-        if (game.getGamePlayers().size() <= 2) {
+        if (game.getGamePlayers().size() == 2) {
             return new ResponseEntity<>(Util.makeMap("error", "game is full"), HttpStatus.FORBIDDEN);
         }
 
         GamePlayer gamePlayer = new GamePlayer(playerAutenticado, game);
         gamePlayerRepository.save(gamePlayer);
 
+//        GamePlayer gamePlayer1 = gamePlayerRepository.save(new GamePlayer(playerAutenticado, game));
+//        otra forma de hacerlo en un renglon
+
         return new ResponseEntity<>(Util.makeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
     }
 
 
     @RequestMapping("/game_view/{gamePlayerId}")
-    public ResponseEntity<Map<String, Object>> getGamePlayerInformation(@PathVariable("gamePlayerId") Long gamePlayerID, Authentication authentication) {
+    public ResponseEntity<Map<String, Object>> getGamePlayerInformation(@PathVariable(name = "gamePlayerId") Long gamePlayerID, Authentication authentication) {
         Map<String, Object> dto = new LinkedHashMap<>();
         Map<String, Object> hits = new LinkedHashMap<>();
 
@@ -163,7 +169,7 @@ public class GameController {
     }
 
     @RequestMapping("/games/players/{gamePlayerId}/ships")
-    public ResponseEntity<Map<String, Object>> getShipsFromGamePlayer(@PathVariable("gamePlayerId") Long gamePlayerID,
+    public ResponseEntity<Map<String, Object>> getShipsFromGamePlayer(@PathVariable(name = "gamePlayerId") Long gamePlayerID,
                                                                       @RequestBody List<Ship> ships,
                                                                       Authentication authentication) {
         if (Util.isGuest(authentication)) {
@@ -197,9 +203,9 @@ public class GameController {
     }
 
     @RequestMapping("/games/players/{gamePlayerId}/salvos")
-    public ResponseEntity<Map<String, Object>> getSalvoesFromGamePlayer(@PathVariable("gamePlayerId") Long gamePlayerID,
-                                                                      @RequestBody Salvo salvo,
-                                                                      Authentication authentication) {
+    public ResponseEntity<Map<String, Object>> getSalvoesFromGamePlayer(@PathVariable(name = "gamePlayerId") Long gamePlayerID,
+                                                                        @RequestBody Salvo salvo,
+                                                                        Authentication authentication) {
         if (Util.isGuest(authentication)) {
             return new ResponseEntity<>(Util.makeMap("error", "Player sin Loguear, no puede ver info"), HttpStatus.FORBIDDEN);
         }
@@ -219,34 +225,38 @@ public class GameController {
         }
 
 
-        if( gamePlayer.getSalvoes().stream().filter(salvo1 -> salvo1.getTurn() == salvo.getTurn()).count() > 0 ){
+        if (gamePlayer.getSalvoes().stream().filter(salvo1 -> salvo1.getTurn() == salvo.getTurn()).count() > 0) {
             return new ResponseEntity<>(Util.makeMap("error", "El jugador ya asigno salvos a ese turno"), HttpStatus.FORBIDDEN);
         }
 
+        //guardar los salvos
+        salvo.setGamePlayer(gamePlayer);
+        salvoRepository.save(salvo);
+//        gamePlayerRepository.save(gamePlayer);
+        
         return new ResponseEntity<>(Util.makeMap("ok", "salvos asignados"), HttpStatus.OK);
 
     }
 
 
+    //pdf
 
 
 
 
 
+    public String getState(GamePlayer gamePlayerSelf, GamePlayer gamePlayerOpponent) {
 
-
-    public String getState(GamePlayer gamePlayerSelf, GamePlayer gamePlayerOpponent){
-
-        if(gamePlayerSelf.getShips().isEmpty()){
+        if (gamePlayerSelf.getShips().isEmpty()) {
             return "PLACESHIPS";
         }
-        if(gamePlayerSelf.getGame().getGamePlayers().size()==1){
+        if (gamePlayerSelf.getGame().getGamePlayers().size() == 1) {
             return "WAITINGFOROPP";
         }
-        if(gamePlayerSelf.getId()<gamePlayerOpponent.getId()){//el primer en empezar es el que creo la partida
-            return "START";
+        if (gamePlayerSelf.getId() < gamePlayerOpponent.getId()) {//el primer en empezar es el que creo la partida
+            return "PLAY";
         }
-        if(gamePlayerSelf.getId()>gamePlayerOpponent.getId()){//el segundo en entrar a la partida tiene que esperar
+        if (gamePlayerSelf.getId() > gamePlayerOpponent.getId()) {//el segundo en entrar a la partida tiene que esperar
             return "WAIT";
         }
 

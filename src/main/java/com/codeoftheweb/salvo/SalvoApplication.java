@@ -57,8 +57,8 @@ public class SalvoApplication {
             Player player_obrian = new Player("c.obrian@ctu.gov", passwordEncoder().encode("42"));
             Player player_kBauer = new Player("kim_bauer@gmail.com", passwordEncoder().encode("kb"));
             Player player_almeida = new Player("t.almeida@ctu.gov", passwordEncoder().encode("mole"));
-            Player erbara = new Player("erbara", passwordEncoder().encode("admin"));
-            Player admin = new Player("admin", passwordEncoder().encode("admin"));
+            Player erbara = new Player("erbara@erbara", passwordEncoder().encode("admin"));
+            Player admin = new Player("admin@admin", passwordEncoder().encode("admin"));
             //creacion de juegos
             Game game1 = new Game();
             Game game2 = new Game();
@@ -280,8 +280,10 @@ public class SalvoApplication {
 
 @Configuration
 class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
+
     @Autowired
-    PlayerRepository playerRepository;
+    private PlayerRepository playerRepository;
+
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(inputName-> {
@@ -304,9 +306,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/web/**").permitAll()
-                .antMatchers("/api/games/**").permitAll()
+                .antMatchers("/api/**").permitAll()
                 .antMatchers("/api/players","/api/login","/api/logout").permitAll()
-                .antMatchers("/rest").denyAll()
+                .antMatchers("/rest", "/rest/**").permitAll() //todo cambiar esto, esta para testear nada mas
                 .antMatchers("/web/games.html").permitAll()
                 .antMatchers("/api/users").permitAll()
                 .antMatchers("/web/game.html?gp=*","/api/game_view/*").hasAuthority("USER")

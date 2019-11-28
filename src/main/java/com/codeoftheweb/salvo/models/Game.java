@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo.models;
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -45,9 +46,10 @@ public class Game {
     }
 
     public List<Map<String, Object>> getScoresDto(){
-        return this.getGamePlayers()
+//        return this.getGamePlayers()
+        return this.getScore()
                 .stream()
-                .map(gamePlayer -> gamePlayer.getScore())
+//                .map(gamePlayer -> gamePlayer.getScore())
                 .map(score -> score.makeScoreDto())
                 .collect(Collectors.toList())
                 ;
@@ -67,7 +69,6 @@ public class Game {
 
 
     //SETTERS y GETTERS
-
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }

@@ -25,17 +25,20 @@ public class PlayerController {
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping(path = "/players", method = RequestMethod.POST)
-    public ResponseEntity<Object> register(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<Object> register(
+            @RequestParam (name = "email") String email,
+            @RequestParam (name = "password") String password)
+    {
 
-        if( (username.isEmpty() || password.isEmpty())) {
+        if( (email.isEmpty() || password.isEmpty())) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
 
-        if (playerRepository.findByUsername(username) !=  null) {
-            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+        if (playerRepository.findByUsername(email).orElse(null) !=  null) {
+            return new ResponseEntity<>("Name already ghkin use", HttpStatus.FORBIDDEN);
         }
 
-        playerRepository.save(new Player( username, passwordEncoder.encode(password)));
+        playerRepository.save(new Player( email, passwordEncoder.encode(password)));
         return new ResponseEntity<>(HttpStatus.CREATED); //este es el codigo 201
     }
 
