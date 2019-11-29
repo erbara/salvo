@@ -163,6 +163,7 @@ public class GameController {
                 .flatMap(_gamePlayer -> _gamePlayer.getSalvoes().stream().map(_salvo -> _salvo.makeSalvoDto()))
                 .collect(Collectors.toList())
         );
+//        dto.put("hits", this.makeHitsDto(gamePlayer));
         dto.put("hits", hits);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
@@ -233,7 +234,7 @@ public class GameController {
         salvo.setGamePlayer(gamePlayer);
         salvoRepository.save(salvo);
 //        gamePlayerRepository.save(gamePlayer);
-        
+
         return new ResponseEntity<>(Util.makeMap("ok", "salvos asignados"), HttpStatus.OK);
 
     }
@@ -263,4 +264,20 @@ public class GameController {
         return "LOST";
     }
 
+
+
+
+    public Map<String, Object>makeHitsDto(GamePlayer gamePlayer){
+
+        Map<String, Object>dto = new LinkedHashMap<>();
+
+        dto.put("self", gamePlayer.getPlayer().makePlayerHitsDto(gamePlayer));
+        dto.put("opponent", gamePlayer.getOpponent().getPlayer().makePlayerHitsDto(gamePlayer));
+
+        return dto;
+    }
+
+
+
 }
+
