@@ -65,7 +65,7 @@ public class Ship {
         this.type = type;
     }
 
-    public List getShipLocations() {
+    public List<String> getShipLocations() {
         return shipLocations;
     }
 

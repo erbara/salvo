@@ -164,7 +164,7 @@ public class GameController {
                 .collect(Collectors.toList())
         );
 //        dto.put("hits", this.makeHitsDto(gamePlayer));
-        dto.put("hits", hits);
+        dto.put("hits", this.makePlayerHitsDto(gamePlayer));
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
@@ -239,13 +239,6 @@ public class GameController {
 
     }
 
-
-    //pdf
-
-
-
-
-
     public String getState(GamePlayer gamePlayerSelf, GamePlayer gamePlayerOpponent) {
 
         if (gamePlayerSelf.getShips().isEmpty()) {
@@ -254,7 +247,7 @@ public class GameController {
         if (gamePlayerSelf.getGame().getGamePlayers().size() == 1) {
             return "WAITINGFOROPP";
         }
-        if (gamePlayerSelf.getId() < gamePlayerOpponent.getId()) {//el primer en empezar es el que creo la partida
+        if (gamePlayerSelf.getId() < gamePlayerOpponent.getId()) {//el primer en empezar es el que crea la partida
             return "PLAY";
         }
         if (gamePlayerSelf.getId() > gamePlayerOpponent.getId()) {//el segundo en entrar a la partida tiene que esperar
@@ -266,18 +259,125 @@ public class GameController {
 
 
 
-
-    public Map<String, Object>makeHitsDto(GamePlayer gamePlayer){
+    private Map<String, Object>makeHitsDto(GamePlayer gamePlayer){
 
         Map<String, Object>dto = new LinkedHashMap<>();
 
-        dto.put("self", gamePlayer.getPlayer().makePlayerHitsDto(gamePlayer));
-        dto.put("opponent", gamePlayer.getOpponent().getPlayer().makePlayerHitsDto(gamePlayer));
+        dto.put("self", makePlayerHitsDto(gamePlayer));
+        dto.put("opponent", makePlayerHitsDto(gamePlayer.getOpponent()));
 
         return dto;
     }
 
 
+////////////////////////////////////////////////////////////////////
+
+   private List<Map<String, Object>> makePlayerHitsDto(GamePlayer gameplayer){
+        List<Map<String, Object>> dto = new LinkedHashMap<>();
+        Map<String, Object> hitsMapPerTurn = new LinkedHashMap<>();
+
+            Integer carrierTotalDamage = 0;
+            Integer destroyerTotalDamage = 0;
+            Integer patrolboatTotalDamage = 0;
+            Integer submarineTotalDamage = 0;
+            Integer battleshipTotalDamage = 0;
+
+
+       List<String> carrierLocations = getPlacedShipLocation("carrier", gameplayer);
+       List<String> destroyerLocations = getPlacedShipLocation("destroyer", gameplayer);
+       List<String> patrolboatLocations = getPlacedShipLocation("patrolboat", gameplayer);
+       List<String> submarineLocations = getPlacedShipLocation("submarine", gameplayer);
+       List<String> battleshipLocations = getPlacedShipLocation("battleship", gameplayer);
+
+
+        for( Salvo salvo : gameplayer.getOpponent().getSalvoes()){
+
+            List<String> hitLocations = getHitsShips(salvo, gameplayer);
+            Map<String, Object> damagesPerTurn = new HashMap<>();
+
+
+            Integer carrierTurnHits = 0;
+            Integer destroyerTurnHits = 0;
+            Integer patrolboatTurnHits = 0;
+            Integer submarineTurnHits = 0;
+            Integer battleshipTurnHits = 0;
+            Integer missedShots = salvo.getLocations().size() - hitLocations.size();
+
+            carrierTurnHits = calculateShipHits(carrierLocations, hitLocations);
+            carrierTotalDamage += carrierTurnHits;
+
+            destroyerTurnHits = calculateShipHits(destroyerLocations, hitLocations);
+            destroyerTotalDamage += destroyerTurnHits;
+
+            patrolboatTurnHits = calculateShipHits(patrolboatLocations, hitLocations);
+            patrolboatTotalDamage += patrolboatTurnHits;
+
+            submarineTurnHits = calculateShipHits(submarineLocations, hitLocations);
+            submarineTotalDamage += submarineTurnHits;
+
+            battleshipTurnHits = calculateShipHits(battleshipLocations, hitLocations);
+            battleshipTotalDamage += battleshipTurnHits;
+
+
+
+            damagesPerTurn.put("carrierHits", carrierTurnHits);
+            damagesPerTurn.put("destroyerHits", destroyerTurnHits);
+            damagesPerTurn.put("submarineHits", submarineTurnHits);
+            damagesPerTurn.put("patrolboatHits", patrolboatTurnHits);
+            damagesPerTurn.put("battleshipHits", battleshipTurnHits);
+            damagesPerTurn.put("carrier", carrierTotalDamage);
+            damagesPerTurn.put("destroyer", destroyerTotalDamage);
+            damagesPerTurn.put("submarine", submarineTotalDamage);
+            damagesPerTurn.put("patrolboat", patrolboatTotalDamage);
+            damagesPerTurn.put("battleship", battleshipTotalDamage);
+            hitsMapPerTurn.put("turn", salvo.getTurn());
+            hitsMapPerTurn.put("hitLocations", hitLocations);
+            hitsMapPerTurn.put("damages", damagesPerTurn);
+            hitsMapPerTurn.put("missed", missedShots);
+            dto.add(hitsMapPerTurn);
+
+
+        }
+
+        return dto;
+   }
+
+   private Integer calculateShipHits(List<String> shipLocations, List<String> hitLocations){
+        return Math.toIntExact(hitLocations.stream()
+                .filter(hit -> shipLocations.contains(hit))
+                .count());
+   }
+
+    private List<String> getPlacedShipLocation(String typeShip, GamePlayer gamePlayer){
+
+        return gamePlayer.getShips()
+                .stream()
+                .filter(ship -> ship.getType().equalsIgnoreCase(typeShip))
+                .findFirst()
+                .get()
+                .getShipLocations();
+    }
+
+
+    public List<String> getHitsShips( Salvo salvo, GamePlayer gamePlayer ) {
+        return gamePlayer.getShips()
+                .stream()
+                .flatMap(ship -> ship.getShipLocations()
+                        .stream()
+                        .flatMap(shipLocation -> gamePlayer
+                                .getOpponent()
+                                .getSalvoes()
+                                .stream()
+                                //me recolecta nada mas el salvo del turno que me interesa.
+                                .filter(_salvo -> _salvo.getTurn() == salvo.getTurn())
+                                .flatMap(_salvo -> _salvo
+                                        .getLocations()
+                                        .stream()
+                                        .filter(salvoLoc ->
+                                                shipLocation.contains(salvoLoc)))))
+                .collect(Collectors.toList())
+                ;
+    }
 
 }
 

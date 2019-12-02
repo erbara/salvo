@@ -4,6 +4,7 @@ import com.sun.org.apache.xpath.internal.objects.XObject;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -51,34 +52,6 @@ public class Player {
     }
 
 
-//    public HashMap<String, Object> showAllScores() {
-//
-//        HashMap<String, Object> dto = new LinkedHashMap<>();
-//
-//        dto.put("player", this.makePlayerDto());
-//        dto.put("totalScores", scores.stream()
-//                .map(_score -> _score.getScore())
-//                .reduce((double) 0, Double::sum)
-//        );
-//        dto.put("totalWins", scores.stream()
-//                .map(_score -> _score.getScore())
-//                .filter(_score -> _score == 1)
-//                .reduce((double) 0, Double::sum)
-//        );
-//        dto.put("totalLosses", scores.stream()
-//                .map(_score -> _score.getScore())
-//                .filter(_score -> _score == 0)
-//                .reduce((double) 0, Double::sum)
-//        );
-//        dto.put("totalTies", scores.stream()
-//                .map(_score -> _score.getScore())
-//                .filter(_score -> _score == 0.5)
-//                .reduce((double) 0, Double::sum)
-//        );
-//
-//        return dto;
-//    }
-
 
     public Map<String, Object> makePlayerDto() {
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -87,87 +60,6 @@ public class Player {
 
         return dto;
     }
-
-    public Map<String, Object> makePlayerHitsDto(GamePlayer gamePlayer) {
-        Map<String, Object> dto = new LinkedHashMap<>();
-
-        //obtengo los salvos de un turno en particular
-        dto.put("turn", gamePlayer.getSalvoes().stream().map(salvo -> this.makeTurnHitsDto(salvo, gamePlayer)));
-        return dto;
-    }
-
-    public Map<String, Object> makeTurnHitsDto(Salvo salvo, GamePlayer gamePlayer) {
-        Map<String, Object> dto = new LinkedHashMap<>();
-
-        dto.put("hitLocations",/*salvo.getGamePlayer().getOpponent().getSalvoes().stream().filter(_salvo -> _salvo.getTurn() == salvo.getTurn())*/
-                this.getHitLocations(salvo, gamePlayer));
-//        dto.put("damages", this.makeDamagesDto(/*this.getHitLocations(salvo, gamePlayer*/)));
-        dto.put("missed", );
-        return dto;
-    }
-
-    public List<String> getHitLocations(Salvo salvo, GamePlayer gamePlayer) {
-        Salvo salvoOpponent = salvo.getGamePlayer().getOpponent().getSalvoes().stream()
-                .filter(_salvo -> _salvo.getTurn() == salvo.getTurn())
-                .findFirst().orElse(null);
-
-        List<String> salvoHits = salvoOpponent.getLocations();
-
-        List<String> myShipsPlacements2 = new ArrayList<>();
-        gamePlayer.getShips().forEach(
-                unShip -> unShip.getShipLocations().forEach(oneShipLocation -> myShipsPlacements2.add(oneShipLocation.toString())));
-
-
-        List<String> coincidencias = new ArrayList<>();
-        coincidencias = myShipsPlacements2.stream().filter(shipLocation -> salvoOpponent.getLocations().contains(shipLocation)).collect(Collectors.toList());
-
-
-        return coincidencias;
-    }
-
-
-    public long getHitsShips(String nameShip, GamePlayer gamePlayer, Salvo salvo) {
-        return gamePlayer.getShips()
-                .stream()
-                .filter(ship -> ship.getType().equalsIgnoreCase(nameShip))
-                .findFirst()
-                .orElse(null)
-                .getShipLocations()
-                .stream()
-                .filter(location -> salvo.getLocations().contains(location.toString()))
-                .count()
-                ;
-    }
-
-    public long getTotalHitsShips(String nameShip, GamePlayer gamePlayer, Salvo salvo) {
-
-        return gamePlayer.getSalvoes().stream()
-                .
-
-    }
-
-    public Map<String, Object> makeDamagesDto(Salvo salvo, GamePlayer gamePlayer) {
-        Map<String, Object> dto = new LinkedHashMap<>();
-
-
-        dto.put("carrierHits", getHitsShips("carrier", gamePlayer, salvo));
-
-
-        dto.put("battleshipHits", getHitsShips("battleship", gamePlayer, salvo));
-        dto.put("submarineHits", getHitsShips("submarine", gamePlayer, salvo));
-        dto.put("destroyerHits", getHitsShips("destroyer", gamePlayer, salvo));
-        dto.put("patrolboatHits", getHitsShips("patrolboat", gamePlayer, salvo));
-        dto.put("carrier", );
-        dto.put("battleship", );
-        dto.put("submarine", );
-        dto.put("destroyer", );
-        dto.put("patrolboat", );
-
-        return dto;
-    }
-
-    public
-
 
     //SETTERS y GETTERS
 

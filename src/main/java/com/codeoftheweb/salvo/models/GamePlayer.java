@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class GamePlayer {
@@ -68,6 +69,7 @@ public class GamePlayer {
                 .orElse(new GamePlayer())
                 ;
     }
+
 
     //SETTERS y GETTERS
     public Player getPlayer() {
