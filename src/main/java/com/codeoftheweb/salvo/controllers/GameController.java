@@ -273,7 +273,7 @@ public class GameController {
 ////////////////////////////////////////////////////////////////////
 
    private List<Map<String, Object>> makePlayerHitsDto(GamePlayer gameplayer){
-        List<Map<String, Object>> dto = new LinkedHashMap<>();
+        List<Map<String, Object>> dto = new LinkedList<>();
         Map<String, Object> hitsMapPerTurn = new LinkedHashMap<>();
 
             Integer carrierTotalDamage = 0;
