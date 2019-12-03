@@ -30,7 +30,7 @@ public class GamePlayer {
     private Set<Ship> ships;
 
     @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
-    private Set<Salvo> salvoes;
+    private Set<Salvo> salvoes; //todo
 
     //CONSTRUCTORES
 

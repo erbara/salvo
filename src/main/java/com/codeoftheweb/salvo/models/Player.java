@@ -1,6 +1,6 @@
 package com.codeoftheweb.salvo.models;
 
-import com.sun.org.apache.xpath.internal.objects.XObject;
+//import com.sun.org.apache.xpath.internal.objects.XObject;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;

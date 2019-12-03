@@ -1,7 +1,6 @@
 package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import java.util.*;
@@ -22,18 +21,18 @@ public class Salvo {
 
     @ElementCollection
     @Column(name = "locations")
-    private List<String> locations = new ArrayList<>();
+    private List<String> salvoLocations = new ArrayList<>();
 
     //CONSTRUCTORES
 
     public Salvo() {
-
+//        this.setTurn(0);
     }
 
     public Salvo(GamePlayer gamePlayer, int turn, List locations) {
         this.setGamePlayer(gamePlayer);
         this.setTurn(turn);
-        this.setLocations(locations);
+        this.setSalvoLocations(locations);
     }
 
     //METODOS
@@ -43,7 +42,7 @@ public class Salvo {
         dto.put("id", id);
         dto.put("turn", turn);
         dto.put("player", gamePlayer.getPlayer().getId());
-        dto.put("locations", locations);
+        dto.put("locations", salvoLocations);
 
         return dto;
     }
@@ -59,8 +58,8 @@ public class Salvo {
         return gamePlayer;
     }
 
-    public void setGamePlayer(GamePlayer gamePlayerId) {
-        this.gamePlayer = gamePlayerId;
+    public void setGamePlayer(GamePlayer gamePlayer) {
+        this.gamePlayer = gamePlayer;
     }
 
     public long getTurn() {
@@ -71,12 +70,12 @@ public class Salvo {
         this.turn = turn;
     }
 
-    public List<String> getLocations() {
-        return locations;
+    public List<String> getSalvoLocations() {
+        return salvoLocations;
     }
 
-    public void setLocations(List<String> locations) {
-        this.locations = locations;
+    public void setSalvoLocations(List<String> salvoLocations) {
+        this.salvoLocations = salvoLocations;
     }
 
 
