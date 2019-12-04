@@ -48,7 +48,6 @@ public class GamePlayer {
         return player.getOneScore(this);
     }
 
-
     //METODOS
 
     public Map<String, Object> makeGamePlayerDto() {

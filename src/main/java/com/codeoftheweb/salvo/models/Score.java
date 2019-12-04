@@ -42,9 +42,7 @@ public class Score {
     public Map<String, Object> makeScoreDto() {
 
         Map<String, Object> dto = new HashMap<>();
-//        dto.put("id", id); //todo viendo si funciona.
-        dto.put("player", player.getId()); //cambie de player a playerID
-//        dto.put("game", game); //todo
+        dto.put("player", player.getId());
         dto.put("finishDate", finishDate);
         dto.put("score", score);
 

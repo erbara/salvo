@@ -1,6 +1,5 @@
 package com.codeoftheweb.salvo.models;
 
-//import com.sun.org.apache.xpath.internal.objects.XObject;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,7 +13,7 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private long id; // va a ser la primary key.
+    private long id;
 
     private String username;
 
@@ -98,11 +97,5 @@ public class Player {
     public String getPassword() {
         return password;
     }
-
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
-    //no tiene sentido porque no vamos a hacer la opcion de cambiar la contrasena
-
 
 }

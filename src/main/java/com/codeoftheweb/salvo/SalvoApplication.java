@@ -35,13 +35,10 @@ public class SalvoApplication {
         SpringApplication.run(SalvoApplication.class);
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
-
 
     @Bean
     public CommandLineRunner initData(PlayerRepository playerRepository,
@@ -119,7 +116,6 @@ public class SalvoApplication {
             Score score15 = new Score(game8, player_kBauer);//game8
             Score score16 = new Score(game8, player_almeida);
 
-
             //por consigna quiere que le modifiquemos la hora para que aparezca una hora despues del anterior
             game2.setCreationDate(Date.from(game1.getCreationDate().toInstant().plusSeconds(3600)));
             game3.setCreationDate(Date.from(game2.getCreationDate().toInstant().plusSeconds(3600)));
@@ -173,7 +169,6 @@ public class SalvoApplication {
             Ship ship26 = new Ship("SUBMARINE", gamePlayer16, new ArrayList<String>(Arrays.asList("A2", "A3", "A4")));
             Ship ship27 = new Ship("PATROLBOAT", gamePlayer16, new ArrayList<String>(Arrays.asList("G6", "H6")));
 
-
             //creacion de salvoes
             //salvoes game 1
             Salvo salvo_GamePlayer1_Turn1 = new Salvo(gamePlayer1, 1, new ArrayList<String>(Arrays.asList("B5", "C5", "F1")));
@@ -205,7 +200,6 @@ public class SalvoApplication {
             Salvo salvo_GamePlayer10_Turn1 = new Salvo(gamePlayer10, 1, new ArrayList<String>(Arrays.asList("B5", "B6", "C7")));
             Salvo salvo_GamePlayer10_Turn2 = new Salvo(gamePlayer10, 2, new ArrayList<String>(Arrays.asList("C6", "D6", "E6")));
             Salvo salvo_GamePlayer10_Turn3 = new Salvo(gamePlayer10, 3, new ArrayList<String>(Arrays.asList("H1", "H8")));
-
 
             //Simulando cosas que pasan DURANTE la partida
 
@@ -249,7 +243,6 @@ public class SalvoApplication {
                     ship24, ship25, ship26, ship27 //game8
             )));
 
-
             List<Salvo> salvoList = new LinkedList<>();
             salvoList.addAll(new ArrayList<>(Arrays.asList(salvo_GamePlayer1_Turn1, salvo_GamePlayer1_Turn2, salvo_GamePlayer2_Turn1, salvo_GamePlayer2_Turn2, //game1
                     salvo_GamePlayer3_Turn1, salvo_GamePlayer3_Turn2, salvo_GamePlayer4_Turn1, salvo_GamePlayer4_Turn2, //game2
@@ -258,12 +251,10 @@ public class SalvoApplication {
                     salvo_GamePlayer9_Turn1, salvo_GamePlayer9_Turn2, salvo_GamePlayer10_Turn1, salvo_GamePlayer10_Turn2, salvo_GamePlayer10_Turn3 //game5
             )));
 
-
             List<Score> scoreList = new LinkedList<>();
             scoreList.addAll(new ArrayList<>(Arrays.asList(score1, score2, score3, score4, score5, score6, score7, score8, score9, score10)));
 //            scoreList.addAll(new ArrayList<>(Arrays.asList(score11, score12, score13, score14)));
             scoreList.addAll(new ArrayList<>(Arrays.asList(score15, score16)));
-
 
             //Guardar en la base de datos
             gameRepository.saveAll(gameList);
@@ -277,7 +268,6 @@ public class SalvoApplication {
 
 }
 
-
 @Configuration
 class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
@@ -286,7 +276,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(inputName-> {
+        auth.userDetailsService(inputName -> {
             Player player = playerRepository.findByUsername(inputName).orElse(null);
             if (player != null) {
                 return new User(player.getUsername(), player.getPassword(),
@@ -307,14 +297,14 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/web/**").permitAll()
                 .antMatchers("/api/**").permitAll()
-                .antMatchers("/api/players","/api/login","/api/logout").permitAll()
+                .antMatchers("/api/players", "/api/login", "/api/logout").permitAll()
                 .antMatchers("/rest", "/rest/**").permitAll() //todo cambiar esto, esta para testear nada mas
                 .antMatchers("/web/games.html").permitAll()
                 .antMatchers("/api/users").permitAll()
-                .antMatchers("/web/game.html?gp=*","/api/game_view/*").hasAuthority("USER")
+                .antMatchers("/web/game.html?gp=*", "/api/game_view/*").hasAuthority("USER")
 //                .anyRequest().denyAll()
                 .antMatchers("/*").permitAll()
-                ;
+        ;
 //-------------------------------------------------------------------------------------------------------
         http.formLogin()
                 .usernameParameter("name")
@@ -333,6 +323,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // if logout is successful, just send a success response
         http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
     }
+
     private void clearAuthenticationAttributes(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {

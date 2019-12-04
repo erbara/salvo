@@ -11,7 +11,6 @@ import java.util.Map;
 @Entity
 public class Ship {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -21,7 +20,6 @@ public class Ship {
 
     @ElementCollection
     @Column(name = "shipLocations")
-//    @Column(name = "locations")
     private List<String> shipLocations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -38,7 +36,6 @@ public class Ship {
         this.type = type;
         this.gamePlayer = gamePlayer;
         this.shipLocations = shipLocation;
-
     }
 
     //METODOS
@@ -80,6 +77,5 @@ public class Ship {
     public void setShipLocations(List<String> shipLocations) {
         this.shipLocations = shipLocations;
     }
-
 
 }

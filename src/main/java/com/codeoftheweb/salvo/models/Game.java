@@ -37,7 +37,7 @@ public class Game {
 
     //METODOS
 
-    public List<Map<String, Object>> getGamePlayersDto(){
+    public List<Map<String, Object>> getGamePlayersDto() {
         return this.getGamePlayers()
                 .stream()
                 .map(gamePlayer -> gamePlayer.makeGamePlayerDto())
@@ -45,11 +45,9 @@ public class Game {
                 ;
     }
 
-    public List<Map<String, Object>> getScoresDto(){
-//        return this.getGamePlayers()
+    public List<Map<String, Object>> getScoresDto() {
         return this.getScore()
                 .stream()
-//                .map(gamePlayer -> gamePlayer.getScore())
                 .map(score -> score.makeScoreDto())
                 .collect(Collectors.toList())
                 ;

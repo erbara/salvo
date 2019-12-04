@@ -42,7 +42,6 @@ public class PlayerController {
         return new ResponseEntity<>(HttpStatus.CREATED); //este es el codigo 201
     }
 
-
     @RequestMapping("/players")
     public List<Object> getPlayersAll() {
         return playerRepository.findAll()
