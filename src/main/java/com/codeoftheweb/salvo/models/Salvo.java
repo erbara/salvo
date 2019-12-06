@@ -26,7 +26,6 @@ public class Salvo {
     //CONSTRUCTORES
 
     public Salvo() {
-//        this.setTurn(0);
     }
 
     public Salvo(GamePlayer gamePlayer, int turn, List locations) {
@@ -47,6 +46,9 @@ public class Salvo {
         return dto;
     }
 
+    public void sumarTurno (int turnoAnterior) {
+        this.turn = turnoAnterior + 1 ;
+    }
 
     //SETTERS Y GETTERS
 

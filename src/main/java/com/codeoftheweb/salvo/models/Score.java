@@ -14,6 +14,7 @@ public class Score {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "game_id")
     private Game game;
@@ -22,7 +23,7 @@ public class Score {
     @JoinColumn(name = "player_id")
     private Player player;
 
-    private double score;
+    private double score ;
 
     private Date finishDate;
 
@@ -31,11 +32,17 @@ public class Score {
 
     }
 
+    public Score(Game game, Player player, double score, Date finishDate) {
+        this.game = game;
+        this.player = player;
+        this.score = score;
+        this.finishDate = finishDate;
+    }
+
     public Score(Game game, Player player) {
         this.game = game;
         this.player = player;
     }
-
 
     //METODOS
 
@@ -60,6 +67,7 @@ public class Score {
         this.id = id;
     }
 
+//    @com.fasterxml.jackson.annotation.JsonIgnore
     public Game getGame() {
         return game;
     }

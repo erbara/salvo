@@ -18,7 +18,7 @@ public class Game {
     private String gameState;
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
-    private Set<GamePlayer> gamePlayers = new LinkedHashSet<>();
+    private List<GamePlayer> gamePlayers = new LinkedList<>();
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<Score> score = new LinkedHashSet<>();
@@ -67,11 +67,11 @@ public class Game {
 
 
     //SETTERS y GETTERS
-    public Set<GamePlayer> getGamePlayers() {
+    public List<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }
 
-    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
+    public void setGamePlayers(List<GamePlayer> gamePlayers) {
         this.gamePlayers = gamePlayers;
     }
 
@@ -87,6 +87,7 @@ public class Game {
         this.creationDate = creationDate;
     }
 
+//    @com.fasterxml.jackson.annotation.JsonIgnore
     public Set<Score> getScore() {
         return score;
     }

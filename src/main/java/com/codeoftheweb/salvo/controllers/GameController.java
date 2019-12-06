@@ -35,6 +35,10 @@ public class GameController {
     @Autowired
     private SalvoRepository salvoRepository;
 
+    @Autowired
+    private ScoreRepository scoreRepository;
+
+
     @RequestMapping("/games") //nombre publico
     public Map<String, Object> getGamesAll(Authentication authentication) {
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -122,12 +126,13 @@ public class GameController {
             return new ResponseEntity<>(Util.makeMap("error", "GamePlayer no deberia ver esto"), HttpStatus.UNAUTHORIZED);
         }
 
+        String state = getState(gamePlayer, gamePlayer.getOpponent());
         hits.put("self", new ArrayList<>());
         hits.put("opponent", new ArrayList<>());
 
         dto.put("id", gamePlayer.getId());
         dto.put("created", gamePlayer.getGame().getCreationDate());
-        dto.put("gameState", getState(gamePlayer, gamePlayer.getOpponent()));
+        dto.put("gameState", state);
 
         dto.put("gamePlayers", gamePlayer.getGame().getGamePlayers()
                 .stream()
@@ -151,13 +156,10 @@ public class GameController {
                 .collect(Collectors.toList())
         );
 
-        dto.put("scores", gamePlayer.getGame().getGamePlayers()
-                .stream().map(gamePlayer1 -> gamePlayer.getScore())
-        );
 
 //        no se puede calcular el hits cuando no se colocaron los barcos
-        if (getState(gamePlayer, gamePlayer.getOpponent()).equalsIgnoreCase("PLACESHIPS") ||
-                getState(gamePlayer, gamePlayer.getOpponent()).equalsIgnoreCase("WAITINGFOROP") ||
+        if (state.equalsIgnoreCase("PLACESHIPS") ||
+                state.equalsIgnoreCase("WAITINGFOROP") ||
                 gamePlayer.getOpponent().getSalvoes() == null
         ) {
 
@@ -228,32 +230,218 @@ public class GameController {
             return new ResponseEntity<>(Util.makeMap("error", "El jugador ya asigno salvos a ese turno"), HttpStatus.FORBIDDEN);
         }
 
-        //guardar los salvos
-//        salvo.setTurn();
+        if (gamePlayer.getSalvoes().isEmpty()) {
+            salvo.setTurn(1);
+        } else {
+            salvo.setTurn(gamePlayer.getSalvoes().size() + 1);
+        }
+
         salvo.setGamePlayer(gamePlayer);
         salvoRepository.save(salvo);
+        gamePlayer.addSalvo(salvo);
+
+        String state =  getState(gamePlayer, gamePlayer.getOpponent());
+
+        if ( state.equalsIgnoreCase("TIE") ) {
+
+            Score scoreSelf = new Score(gamePlayer.getGame(), gamePlayer.getPlayer(), 0.5, new Date());
+            Score scoreOpponent = new Score(gamePlayer.getGame(), gamePlayer.getOpponent().getPlayer(), 0.5, new Date());
+
+            if (!existScore(gamePlayer.getGame())) {
+                scoreRepository.save(scoreSelf);
+                scoreRepository.save(scoreOpponent);
+            }
+
+        }else{
+
+                GamePlayer gamePlayerGanador = gamePlayer;
+                GamePlayer gamePlayerPerdedor = gamePlayer.getOpponent();
+
+                if (state.equalsIgnoreCase("WON")){
+                    gamePlayerGanador = gamePlayer;
+                    gamePlayerPerdedor = gamePlayer.getOpponent();
+
+                    Score scoreWinner= new Score(gamePlayer.getGame(), gamePlayerGanador.getPlayer(), 1.0, new Date());
+                    Score scoreLoser = new Score(gamePlayer.getGame(), gamePlayerPerdedor.getPlayer(), 0.0, new Date());
+
+                    if (!existScore(gamePlayer.getGame())) {
+                        scoreRepository.save(scoreWinner);
+                        scoreRepository.save(scoreLoser);
+                    }
+                }
+                if (state.equalsIgnoreCase("LOST")){
+                    gamePlayerGanador = gamePlayer.getOpponent();
+                    gamePlayerPerdedor = gamePlayer;
+
+                    Score scoreWinner= new Score(gamePlayer.getGame(), gamePlayerGanador.getPlayer(), 1.0, new Date());
+                    Score scoreLoser = new Score(gamePlayer.getGame(), gamePlayerPerdedor.getPlayer(), 0.0, new Date());
+
+                    if (!existScore(gamePlayer.getGame())) {
+                        scoreRepository.save(scoreWinner);
+                        scoreRepository.save(scoreLoser);
+                    }
+                }
+
+
+            }
+
 
         return new ResponseEntity<>(Util.makeMap("OK", "salvos asignados"), HttpStatus.OK);
 
     }
 
-    public String getState(GamePlayer gamePlayerSelf, GamePlayer gamePlayerOpponent) {
 
-        if (gamePlayerSelf.getShips().isEmpty()) {
+    public String getState(GamePlayer self, GamePlayer opponent) {
+
+        if (self.getShips().isEmpty()) {
             return "PLACESHIPS";
         }
-        if (gamePlayerSelf.getGame().getGamePlayers().size() == 1) {
+        if (self.getGame().getGamePlayers().size() == 1) {
             return "WAITINGFOROPP";
         }
-        if (gamePlayerSelf.getId() < gamePlayerOpponent.getId()) {//el primer en empezar es el que crea la partida
+
+        //el primer turno
+        if (self.getSalvoes().isEmpty()) {
+
+            if( opponent.getShips().isEmpty()){ //no puedo jugar hasta que el oponente coloque sus barcos
+                return "WAIT";
+            }
             return "PLAY";
         }
-        if (gamePlayerSelf.getId() > gamePlayerOpponent.getId()) {//el segundo en entrar a la partida tiene que esperar
-            return "WAIT";
+        //ya jugue mi primer turno pero mi oponente todavia
+        if (!self.getSalvoes().isEmpty() && opponent.getSalvoes().isEmpty()) return "WAIT";
+
+        //yo no jugue pero mi oponente si
+        if (self.getSalvoes().isEmpty() && !opponent.getSalvoes().isEmpty()) return "PLAY";
+
+
+
+        int maxTurnPlayedSelf = self.getSalvoes().size();
+        int maxTurnPlayedOpponent = opponent.getSalvoes().size();
+
+        boolean allMyShipsSinked = allPlayerShipsSunk(self);
+        boolean allOpponentShipsSinked = allPlayerShipsSunk(opponent);
+
+
+            //ambos jugamos el turno entero
+            if ( maxTurnPlayedSelf == maxTurnPlayedOpponent){
+
+                //nadie gano ni perdio
+                if (!allMyShipsSinked && !allOpponentShipsSinked) return "PLAY";
+
+                //me hundieron los barcos y al oponente le quedan
+                if (allMyShipsSinked && !allOpponentShipsSinked) return "LOST";
+
+                //me quedan barcos y al oponente no
+                if (!allMyShipsSinked && allOpponentShipsSinked)  return "WON";
+
+                
+                if (allMyShipsSinked && allOpponentShipsSinked) return "TIE";
+
+            }
+
+        //ya jugue pero el oponente no
+        return "WAIT";
+    }
+
+    private Boolean existScore(Game game) {
+
+        boolean existScore = false;
+
+        if(!game.getScore().isEmpty()){
+            existScore = true;
+        }
+        return existScore;
+
+    }
+
+
+    private Boolean allPlayerShipsSunk(GamePlayer gamePlayer){
+
+        int carrierDamage = 0;
+        int destroyerDamage = 0;
+        int submarineDamage = 0;
+        int patrolboatDamage = 0;
+        int battleshipDamage = 0;
+        List<String> carrierLocations = new ArrayList<>();
+        List<String> destroyerLocations = new ArrayList<>();
+        List<String> submarineLocations = new ArrayList<>();
+        List<String> patrolboatLocations = new ArrayList<>();
+        List<String> battleshipLocations = new ArrayList<>();
+        for (Ship ship : gamePlayer.getShips()) {
+            switch (ship.getType()) {
+                case "carrier":
+                    carrierLocations = ship.getShipLocations();
+                    break;
+                case "destroyer":
+                    destroyerLocations = ship.getShipLocations();
+                    break;
+                case "submarine":
+                    submarineLocations = ship.getShipLocations();
+                    break;
+                case "patrolboat":
+                    patrolboatLocations = ship.getShipLocations();
+                    break;
+                case "battleship":
+                    battleshipLocations = ship.getShipLocations();
+                    break;
+            }
         }
 
-        return "LOST";
+        for (Salvo salvo : gamePlayer.getOpponent().getSalvoes()) {
+            Integer carrierHitsInTurn = 0;
+            Integer destroyerHitsInTurn = 0;
+            Integer submarineHitsInTurn = 0;
+            Integer patrolboatHitsInTurn = 0;
+            Integer battleshipHitsInTurn = 0;
+            Integer shotsMissed = salvo.getSalvoLocations().size();
+            Map<String, Object> hitsMapPerTurn = new LinkedHashMap<>();
+            Map<String, Object> damagesPerTurn = new LinkedHashMap<>();
+            List<String> salvoLocationList = new ArrayList<>();
+            List<String> hitCellsList = new ArrayList<>();
+            salvoLocationList.addAll(salvo.getSalvoLocations());
+            for (String salvoShot : salvoLocationList) {
+                if (carrierLocations.contains(salvoShot)) {
+                    carrierDamage++;
+                    carrierHitsInTurn++;
+                    hitCellsList.add(salvoShot);
+                    shotsMissed--;
+                }
+                if (destroyerLocations.contains(salvoShot)) {
+                    destroyerDamage++;
+                    destroyerHitsInTurn++;
+                    hitCellsList.add(salvoShot);
+                    shotsMissed--;
+                }
+                if (submarineLocations.contains(salvoShot)) {
+                    submarineDamage++;
+                    submarineHitsInTurn++;
+                    hitCellsList.add(salvoShot);
+                    shotsMissed--;
+                }
+                if (patrolboatLocations.contains(salvoShot)) {
+                    patrolboatDamage++;
+                    patrolboatHitsInTurn++;
+                    hitCellsList.add(salvoShot);
+                    shotsMissed--;
+                }
+                if (battleshipLocations.contains(salvoShot)) {
+                    battleshipDamage++;
+                    battleshipHitsInTurn++;
+                    hitCellsList.add(salvoShot);
+                    shotsMissed--;
+                }
+            }
+        }
+
+        return             carrierDamage == carrierLocations.size()
+                        && destroyerDamage == destroyerLocations.size()
+                        && submarineDamage == submarineLocations.size()
+                        && patrolboatDamage == patrolboatLocations.size()
+                        && battleshipDamage == battleshipLocations.size()
+        ;
     }
+
 
 
     private Map<String, Object> makeHitsDto(GamePlayer gamePlayer) {
@@ -265,7 +453,106 @@ public class GameController {
 
         return dto;
     }
+    public List<Map> makeDamageDTO(GamePlayer self, GamePlayer opponent) {
+        List<Map> dto = new ArrayList<>();
+        int carrierDamage = 0;
+        int destroyerDamage = 0;
+        int submarineDamage = 0;
+        int patrolboatDamage = 0;
+        int battleshipDamage = 0;
+        List<String> carrierLocations = new ArrayList<>();
+        List<String> destroyerLocations = new ArrayList<>();
+        List<String> submarineLocations = new ArrayList<>();
+        List<String> patrolboatLocations = new ArrayList<>();
+        List<String> battleshipLocations = new ArrayList<>();
+        for (Ship ship : self.getShips()) {
+            switch (ship.getType()) {
+                case "carrier":
+                    carrierLocations = ship.getShipLocations();
+                    break;
+                case "destroyer":
+                    destroyerLocations = ship.getShipLocations();
+                    break;
+                case "submarine":
+                    submarineLocations = ship.getShipLocations();
+                    break;
+                case "patrolboat":
+                    patrolboatLocations = ship.getShipLocations();
+                    break;
+                case "battleship":
+                    battleshipLocations = ship.getShipLocations();
+                    break;
+            }
+        }
 
+        List<Salvo> salvosDelOpp = self.getOpponent().getSalvoes().stream().sorted(Comparator.comparing(Salvo::getTurn)).collect(Collectors.toList());
+
+        for (Salvo salvo : salvosDelOpp) {
+            Integer carrierHitsInTurn = 0;
+            Integer destroyerHitsInTurn = 0;
+            Integer submarineHitsInTurn = 0;
+            Integer patrolboatHitsInTurn = 0;
+            Integer battleshipHitsInTurn = 0;
+            Integer shotsMissed = salvo.getSalvoLocations().size();
+            Map<String, Object> hitsMapPerTurn = new LinkedHashMap<>();
+            Map<String, Object> damagesPerTurn = new LinkedHashMap<>();
+            List<String> salvoLocationList = new ArrayList<>();
+            List<String> hitCellsList = new ArrayList<>();
+            salvoLocationList.addAll(salvo.getSalvoLocations());
+            for (String salvoShot : salvoLocationList) {
+                if (carrierLocations.contains(salvoShot)) {
+                    carrierDamage++;
+                    carrierHitsInTurn++;
+                    hitCellsList.add(salvoShot);
+                    shotsMissed--;
+                }
+                if (destroyerLocations.contains(salvoShot)) {
+                    destroyerDamage++;
+                    destroyerHitsInTurn++;
+                    hitCellsList.add(salvoShot);
+                    shotsMissed--;
+                }
+                if (submarineLocations.contains(salvoShot)) {
+                    submarineDamage++;
+                    submarineHitsInTurn++;
+                    hitCellsList.add(salvoShot);
+                    shotsMissed--;
+                }
+                if (patrolboatLocations.contains(salvoShot)) {
+                    patrolboatDamage++;
+                    patrolboatHitsInTurn++;
+                    hitCellsList.add(salvoShot);
+                    shotsMissed--;
+                }
+                if (battleshipLocations.contains(salvoShot)) {
+                    battleshipDamage++;
+                    battleshipHitsInTurn++;
+                    hitCellsList.add(salvoShot);
+                    shotsMissed--;
+                }
+            }
+            damagesPerTurn.put("carrierHits", carrierHitsInTurn);
+            damagesPerTurn.put("destroyerHits", destroyerHitsInTurn);
+            damagesPerTurn.put("submarineHits", submarineHitsInTurn);
+            damagesPerTurn.put("patrolboatHits", patrolboatHitsInTurn);
+            damagesPerTurn.put("battleshipHits", battleshipHitsInTurn);
+            damagesPerTurn.put("carrier", carrierDamage);
+            damagesPerTurn.put("destroyer", destroyerDamage);
+            damagesPerTurn.put("submarine", submarineDamage);
+            damagesPerTurn.put("patrolboat", patrolboatDamage);
+            damagesPerTurn.put("battleship", battleshipDamage);
+
+            hitsMapPerTurn.put("turn", salvo.getTurn());
+            hitsMapPerTurn.put("hitLocations", hitCellsList);
+            hitsMapPerTurn.put("damages", damagesPerTurn);
+            hitsMapPerTurn.put("missed", shotsMissed);
+
+            dto.add(hitsMapPerTurn);
+        }
+        return dto;
+    }
+
+    /*
     private List<Map<String, Object>> makeDamageDTO(GamePlayer self, GamePlayer opponent) {
 
         List<Map<String, Object>> dto = new LinkedList<>();
@@ -330,7 +617,7 @@ public class GameController {
         }
 
         return dto;
-    }
+    }*/
 
     private Integer calculateShipHits(List<String> shipLocations, List<String> hitLocations) {
         return Math.toIntExact(hitLocations.stream()

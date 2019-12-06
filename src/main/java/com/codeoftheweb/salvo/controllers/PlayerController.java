@@ -35,7 +35,7 @@ public class PlayerController {
         }
 
         if (playerRepository.findByUsername(email).orElse(null) !=  null) {
-            return new ResponseEntity<>("Name already ghkin use", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
 
         playerRepository.save(new Player( email, passwordEncoder.encode(password)));

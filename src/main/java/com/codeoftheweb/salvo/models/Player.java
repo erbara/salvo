@@ -43,14 +43,11 @@ public class Player {
     //METODOS
 
     public Score getOneScore(GamePlayer gamePlayer) {
-        Score score = scores.stream()
-                .filter(_score -> _score.getGame() == gamePlayer.getGame())
+        return  scores.stream()
+                .filter(_score -> _score.getGame().getId() == gamePlayer.getGame().getId())
                 .findFirst()
                 .orElse(null);
-        return score;
     }
-
-
 
     public Map<String, Object> makePlayerDto() {
         Map<String, Object> dto = new LinkedHashMap<>();
