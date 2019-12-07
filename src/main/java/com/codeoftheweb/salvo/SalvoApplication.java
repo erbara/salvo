@@ -298,12 +298,11 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/web/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/api/players", "/api/login", "/api/logout").permitAll()
-                .antMatchers("/rest", "/rest/**").permitAll() //todo cambiar esto, esta para testear nada mas
                 .antMatchers("/web/games.html").permitAll()
                 .antMatchers("/api/users").permitAll()
                 .antMatchers("/web/game.html?gp=*", "/api/game_view/*").hasAuthority("USER")
-//                .anyRequest().denyAll()
-                .antMatchers("/*").permitAll()
+                .anyRequest().denyAll()
+                
         ;
 //-------------------------------------------------------------------------------------------------------
         http.formLogin()
