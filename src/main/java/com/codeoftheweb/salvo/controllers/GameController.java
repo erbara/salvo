@@ -39,7 +39,7 @@ public class GameController {
     private ScoreRepository scoreRepository;
 
 
-    @RequestMapping("/games") //nombre publico
+    @RequestMapping("/games") 
     public Map<String, Object> getGamesAll(Authentication authentication) {
         Map<String, Object> dto = new LinkedHashMap<>();
 
@@ -90,7 +90,7 @@ public class GameController {
         Game game = gameRepository.findById(gameId).orElse(null);
 
         if (playerAutenticado == null) {
-            return new ResponseEntity<>(Util.makeMap("error", "algo salio mal al encontrar al player"), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(Util.makeMap("error", "No se encontro al player"), HttpStatus.CONFLICT);
         }
         if (game == null) {
             return new ResponseEntity<>(Util.makeMap("error", "No such game"), HttpStatus.FORBIDDEN);
