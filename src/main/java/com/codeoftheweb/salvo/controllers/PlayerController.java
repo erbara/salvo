@@ -39,7 +39,7 @@ public class PlayerController {
         }
 
         playerRepository.save(new Player( email, passwordEncoder.encode(password)));
-        return new ResponseEntity<>(HttpStatus.CREATED); //este es el codigo 201
+        return new ResponseEntity<>(HttpStatus.CREATED); 
     }
 
     @RequestMapping("/players")
