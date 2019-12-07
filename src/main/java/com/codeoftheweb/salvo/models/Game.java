@@ -87,7 +87,6 @@ public class Game {
         this.creationDate = creationDate;
     }
 
-//    @com.fasterxml.jackson.annotation.JsonIgnore
     public Set<Score> getScore() {
         return score;
     }
