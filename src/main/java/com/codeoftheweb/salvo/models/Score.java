@@ -67,7 +67,6 @@ public class Score {
         this.id = id;
     }
 
-//    @com.fasterxml.jackson.annotation.JsonIgnore
     public Game getGame() {
         return game;
     }
